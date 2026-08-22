@@ -85,7 +85,7 @@ select:focus-visible {
 
 .icon-button {
   position: absolute;
-  left: 50%;
+  right: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -98,7 +98,6 @@ select:focus-visible {
   background: rgba(255, 254, 251, 0.82);
   box-shadow: 0 4px 13px rgba(47, 40, 30, 0.06);
   cursor: pointer;
-  transform: translateX(-50%);
   transition: border-color 180ms ease, background 180ms ease, transform 150ms ease, box-shadow 180ms ease;
 }
 
@@ -109,7 +108,7 @@ select:focus-visible {
 }
 
 .icon-button:active {
-  transform: translateX(-50%) scale(0.96);
+  transform: scale(0.96);
 }
 
 .icon-button span {

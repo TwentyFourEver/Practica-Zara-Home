@@ -50,6 +50,48 @@ let currentQuestion = null;
 let quizLocked = false;
 let quizState = loadQuizState();
 let toastTimer;
+let audioContext;
+
+function playQuizSound(isCorrect) {
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContext) return;
+
+  try {
+    audioContext ??= new AudioContext();
+    if (audioContext.state === "suspended") audioContext.resume();
+
+    const start = audioContext.currentTime;
+    const masterGain = audioContext.createGain();
+    masterGain.gain.setValueAtTime(0.0001, start);
+    masterGain.gain.exponentialRampToValueAtTime(0.16, start + 0.015);
+    masterGain.gain.exponentialRampToValueAtTime(0.0001, start + (isCorrect ? 0.52 : 0.42));
+    masterGain.connect(audioContext.destination);
+
+    const notes = isCorrect
+      ? [{ frequency: 523.25, delay: 0 }, { frequency: 659.25, delay: 0.12 }, { frequency: 783.99, delay: 0.24 }]
+      : [{ frequency: 220, delay: 0 }, { frequency: 164.81, delay: 0.16 }];
+
+    notes.forEach(({ frequency, delay }) => {
+      const oscillator = audioContext.createOscillator();
+      const noteGain = audioContext.createGain();
+      const noteStart = start + delay;
+      const noteEnd = noteStart + (isCorrect ? 0.2 : 0.24);
+
+      oscillator.type = isCorrect ? "sine" : "triangle";
+      oscillator.frequency.setValueAtTime(frequency, noteStart);
+      if (!isCorrect) oscillator.frequency.exponentialRampToValueAtTime(frequency * 0.84, noteEnd);
+      noteGain.gain.setValueAtTime(0.0001, noteStart);
+      noteGain.gain.exponentialRampToValueAtTime(1, noteStart + 0.01);
+      noteGain.gain.exponentialRampToValueAtTime(0.0001, noteEnd);
+      oscillator.connect(noteGain);
+      noteGain.connect(masterGain);
+      oscillator.start(noteStart);
+      oscillator.stop(noteEnd);
+    });
+  } catch {
+    // El quiz sigue funcionando si el navegador o el dispositivo bloquea el audio.
+  }
+}
 
 function loadQuizState() {
   try {
@@ -375,6 +417,7 @@ function submitQuizAnswer(event) {
   const normalize = currentQuestion.answerKind === "measure" ? normalizeMeasure : normalizeCode;
   quizLocked = true;
   const isCorrect = normalize(response) === normalize(currentQuestion.answer);
+  playQuizSound(isCorrect);
   $("#quizAnswerFields").classList.add(isCorrect ? "correct" : "wrong");
   inputs.forEach((input) => {
     input.disabled = true;
