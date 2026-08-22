@@ -145,14 +145,12 @@ function tableInput(answer, kind, label, table) {
       <span class="measure-separator" aria-hidden="true">×</span>
       <input class="table-input measure-part" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3"
         autocomplete="off" spellcheck="false" data-part="1" aria-label="${label}, segundo número" />
-      <span class="cell-mark" aria-hidden="true"></span>
     </div>`;
   }
 
   return `<div class="cell-input-wrap answer-control" ${controlAttributes}>
     <input class="table-input code" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3"
       autocomplete="off" spellcheck="false" aria-label="${label}" />
-    <span class="cell-mark" aria-hidden="true"></span>
   </div>`;
 }
 

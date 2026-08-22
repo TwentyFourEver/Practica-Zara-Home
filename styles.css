@@ -409,7 +409,7 @@ h1 {
 .table-input {
   width: 100%;
   height: 42px;
-  padding: 0 23px 0 7px;
+  padding: 0 7px;
   border: 1px solid var(--line);
   border-radius: 2px;
   background: #fbfaf7;
@@ -426,18 +426,13 @@ h1 {
 }
 
 .table-input.code {
-  padding-right: 19px;
-  padding-left: 4px;
+  padding: 0 4px;
   font-size: 12px;
 }
 
 .measure-pair .table-input {
   min-width: 0;
   padding: 0 3px;
-}
-
-.measure-pair .table-input:nth-of-type(2) {
-  padding-right: 17px;
 }
 
 .answer-control.correct .table-input {
@@ -448,45 +443,6 @@ h1 {
 .answer-control.wrong .table-input {
   border-color: #c7968b;
   background: var(--red-bg);
-}
-
-.cell-mark {
-  position: absolute;
-  top: 50%;
-  right: 5px;
-  display: grid;
-  width: 16px;
-  height: 16px;
-  place-items: center;
-  border-radius: 50%;
-  color: #fff;
-  font-size: 9px;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-50%) scale(0.65);
-  transition: 160ms ease;
-}
-
-.answer-control.correct .cell-mark,
-.answer-control.wrong .cell-mark {
-  opacity: 1;
-  transform: translateY(-50%) scale(1);
-}
-
-.answer-control.correct .cell-mark {
-  background: var(--green);
-}
-
-.answer-control.correct .cell-mark::before {
-  content: "✓";
-}
-
-.answer-control.wrong .cell-mark {
-  background: var(--red);
-}
-
-.answer-control.wrong .cell-mark::before {
-  content: "×";
 }
 
 .table-actions {
