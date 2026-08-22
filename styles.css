@@ -1038,83 +1038,74 @@ h1 {
   font-weight: 700;
 }
 
-.options-list {
-  display: grid;
-  gap: 9px;
+.quiz-answer-form {
+  margin-top: 4px;
 }
 
-.option-button {
-  position: relative;
+.quiz-answer-label {
   display: flex;
+  justify-content: space-between;
+  margin-bottom: 9px;
+  color: var(--muted);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.quiz-answer-label span {
+  font-weight: 500;
+}
+
+.quiz-input-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 10px;
   align-items: center;
-  min-height: 54px;
-  padding: 10px 48px 10px 15px;
+}
+
+.quiz-input-pair > span {
+  color: var(--taupe);
+  font-family: var(--serif);
+  font-size: 23px;
+}
+
+.quiz-input {
+  width: 100%;
+  height: 60px;
+  min-width: 0;
+  padding: 0 12px;
   border: 1px solid var(--line);
   border-radius: 2px;
   background: #fbfaf7;
   color: var(--ink);
-  text-align: left;
-  cursor: pointer;
-  transition: border-color 160ms, background 160ms, transform 140ms;
-}
-
-.option-button:not(:disabled):active {
-  transform: scale(0.99);
-}
-
-.option-letter {
-  display: grid;
-  flex: 0 0 25px;
-  width: 25px;
-  height: 25px;
-  margin-right: 12px;
-  place-items: center;
-  border: 1px solid var(--line);
-  border-radius: 50%;
   font-family: var(--serif);
-  font-size: 12px;
+  font-size: 22px;
+  text-align: center;
+  transition: border-color 160ms, background 160ms, box-shadow 160ms;
 }
 
-.option-value {
-  font-size: 13px;
-  font-weight: 600;
+.quiz-input:focus {
+  border-color: var(--taupe);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(140, 122, 100, 0.09);
 }
 
-.option-button::after {
-  position: absolute;
-  right: 16px;
-  display: grid;
-  width: 20px;
-  height: 20px;
-  place-items: center;
-  border-radius: 50%;
-  color: white;
-  font-size: 12px;
+.quiz-code-input {
+  display: block;
 }
 
-.option-button.correct {
-  border-color: #9fb4a4;
+.quiz-answer-fields.correct .quiz-input {
+  border-color: #8fa798;
   background: var(--green-bg);
 }
 
-.option-button.correct::after {
-  background: var(--green);
-  content: "✓";
-}
-
-.option-button.wrong {
-  border-color: #cba69d;
+.quiz-answer-fields.wrong .quiz-input {
+  border-color: #c7968b;
   background: var(--red-bg);
 }
 
-.option-button.wrong::after {
-  background: var(--red);
-  content: "×";
-}
-
-.option-button:disabled {
-  color: var(--ink);
-  cursor: default;
+.quiz-check-button {
+  margin-top: 12px;
 }
 
 .answer-note {

@@ -82,21 +82,8 @@ function normalizeCode(value) {
   return value.replace(/\s/g, "").trim();
 }
 
-function shuffle(items) {
-  const array = [...items];
-  for (let i = array.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
 function sample(items) {
   return items[Math.floor(Math.random() * items.length)];
-}
-
-function unique(items) {
-  return [...new Set(items)];
 }
 
 function showToast(message) {
@@ -316,16 +303,11 @@ function makeBeddingQuestion() {
   const product = sample(products);
   const askMeasure = Math.random() < 0.62;
   const answer = beddingData[size][product.id][askMeasure ? 0 : 1];
-  const pool = [];
-  Object.values(beddingData).forEach((row) => {
-    products.forEach((item) => pool.push(row[item.id][askMeasure ? 0 : 1]));
-  });
-  const distractors = shuffle(unique(pool).filter((value) => value !== answer)).slice(0, 3);
   return {
     category: "ROPA DE CAMA",
     question: `Para <strong>${size}</strong>, ¿cuál es ${askMeasure ? "la <strong>medida</strong>" : "la <strong>talla</strong>"} de ${product.name.toLowerCase()}?`,
     answer,
-    options: shuffle([answer, ...distractors]),
+    answerKind: askMeasure ? "measure" : "code",
     explanation: `${product.name} · ${size}: ${beddingData[size][product.id][0]} cm, talla ${beddingData[size][product.id][1]}.`
   };
 }
@@ -334,14 +316,13 @@ function makeCushionQuestion() {
   const item = sample(cushionData);
   const askMeasure = Math.random() < 0.68;
   const answer = askMeasure ? item.measure : item.size;
-  const source = cushionData.map((entry) => askMeasure ? entry.measure : entry.size);
   return {
     category: "COJINES",
     question: askMeasure
       ? `Para la <strong>talla ${item.size}</strong>, ¿cuál es la <strong>medida</strong> correcta?`
       : `¿Qué <strong>talla</strong> corresponde a la <strong>medida ${item.measure}</strong>?`,
     answer,
-    options: shuffle([answer, ...shuffle(source.filter((value) => value !== answer)).slice(0, 3)]),
+    answerKind: askMeasure ? "measure" : "code",
     explanation: `La talla ${item.size} corresponde a ${item.measure} cm.`
   };
 }
@@ -353,13 +334,21 @@ function createQuestion() {
   $("#questionCategory").textContent = currentQuestion.category;
   $("#questionNumber").textContent = String(((visibleNumber - 1) % 99) + 1).padStart(2, "0");
   $("#questionText").innerHTML = currentQuestion.question;
-  $("#optionsList").innerHTML = currentQuestion.options
-    .map((option, index) => `
-      <button class="option-button" type="button" data-answer="${option}">
-        <span class="option-letter">${String.fromCharCode(65 + index)}</span>
-        <span class="option-value">${option}${currentQuestion.category === "COJINES" || option.includes("×") ? "" : ""}</span>
-      </button>`)
-    .join("");
+  $("#quizAnswerFields").innerHTML = currentQuestion.answerKind === "measure"
+    ? `<label class="quiz-answer-label">ESCRIBE LA MEDIDA <span>CM</span></label>
+      <div class="quiz-input-pair" role="group" aria-label="Escribe la medida">
+        <input class="quiz-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" aria-label="Primer número de la medida" />
+        <span aria-hidden="true">×</span>
+        <input class="quiz-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" aria-label="Segundo número de la medida" />
+      </div>`
+    : `<label class="quiz-answer-label" for="quizCodeInput">ESCRIBE LA TALLA</label>
+      <input class="quiz-input quiz-code-input" id="quizCodeInput" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" aria-label="Escribe la talla" />`;
+  $$("#quizAnswerFields .quiz-input").forEach((input) => input.addEventListener("input", () => {
+    input.value = input.value.replace(/\D/g, "");
+    $("#quizAnswerFields").classList.remove("correct", "wrong");
+  }));
+  $("#quizAnswerForm").classList.remove("hidden");
+  $(".quiz-check-button").classList.remove("hidden");
   $("#answerNote").className = "answer-note hidden";
   $("#answerNote").textContent = "";
   $("#nextQuestionButton").classList.add("hidden");
@@ -370,16 +359,28 @@ function createQuestion() {
   card.classList.add("swap");
 }
 
-function answerQuestion(event) {
-  const button = event.target.closest(".option-button");
-  if (!button || quizLocked) return;
+function submitQuizAnswer(event) {
+  event.preventDefault();
+  if (quizLocked) return;
+  const inputs = $$("#quizAnswerFields .quiz-input");
+  if (inputs.some((input) => !input.value.trim())) {
+    showToast("Escribe la respuesta completa antes de comprobar.");
+    inputs.find((input) => !input.value.trim())?.focus();
+    return;
+  }
+
+  const response = currentQuestion.answerKind === "measure"
+    ? inputs.map((input) => input.value.trim()).join("x")
+    : inputs[0].value.trim();
+  const normalize = currentQuestion.answerKind === "measure" ? normalizeMeasure : normalizeCode;
   quizLocked = true;
-  const isCorrect = button.dataset.answer === currentQuestion.answer;
-  $$(".option-button").forEach((option) => {
-    option.disabled = true;
-    if (option.dataset.answer === currentQuestion.answer) option.classList.add("correct");
+  const isCorrect = normalize(response) === normalize(currentQuestion.answer);
+  $("#quizAnswerFields").classList.add(isCorrect ? "correct" : "wrong");
+  inputs.forEach((input) => {
+    input.disabled = true;
+    if (!isCorrect) input.setAttribute("aria-invalid", "true");
   });
-  if (!isCorrect) button.classList.add("wrong");
+  $(".quiz-check-button").classList.add("hidden");
 
   quizState.answered += 1;
   if (isCorrect) {
@@ -440,7 +441,7 @@ function resetProgress() {
 setupFillTables();
 setupModeSwitch();
 setupNavigation();
-$("#optionsList").addEventListener("click", answerQuestion);
+$("#quizAnswerForm").addEventListener("submit", submitQuizAnswer);
 $("#nextQuestionButton").addEventListener("click", createQuestion);
 $("#resetButton").addEventListener("click", resetProgress);
 updateStats();
