@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f6f3ed" />
+    <meta name="description" content="Práctica móvil de tallas y medidas para ropa de cama y cojines." />
+    <title>Casa — Tallas y medidas</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Casa, inicio">CASA</a>
+        <button class="icon-button" id="resetButton" type="button" aria-label="Reiniciar progreso" title="Reiniciar progreso">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4.1 7.5A9 9 0 1 1 3 13M4.1 7.5V3.8m0 3.7h3.7" /></svg>
+          <span>Reiniciar</span>
+        </button>
+      </header>
+
+      <main>
+        <section class="view active" id="practiceView" aria-labelledby="practiceTitle">
+          <div class="hero reveal">
+            <p class="eyebrow">GUÍA DE PRODUCTO</p>
+            <h1 id="practiceTitle">Practica a tu ritmo.</h1>
+            <p>Completa la tabla de memoria. Cada medida y talla se revisa mientras avanzas.</p>
+          </div>
+
+          <div class="mode-switch reveal delay-1" role="group" aria-label="Tipo de tabla">
+            <button class="mode-pill active" type="button" data-dataset="bedding">Ropa de cama</button>
+            <button class="mode-pill" type="button" data-dataset="cushions">Cojines</button>
+          </div>
+
+          <section class="table-panel reveal delay-2" id="beddingPractice">
+            <div class="table-toolbar">
+              <div>
+                <span>TABLA COMPLETA</span>
+                <strong>Ropa de cama</strong>
+              </div>
+              <div class="fill-progress" aria-live="polite">
+                <strong id="beddingProgress">0 / 72</strong>
+                <span>CORRECTAS</span>
+              </div>
+            </div>
+            <div class="swipe-hint"><span>←</span> Desliza para ver todos los productos <span>→</span></div>
+            <div class="table-scroll" id="beddingTableScroll" tabindex="0" aria-label="Tabla de ropa de cama desplazable">
+              <table class="practice-table bedding-table" id="beddingTable">
+                <thead>
+                  <tr id="beddingProductHeaders">
+                    <th class="row-heading" rowspan="2">TAMAÑO</th>
+                  </tr>
+                  <tr id="beddingFieldHeaders"></tr>
+                </thead>
+                <tbody id="beddingTableBody"></tbody>
+              </table>
+            </div>
+            <div class="table-actions">
+              <button class="primary-button check-table" type="button" data-check-table="bedding">
+                <span>Revisar casillas llenadas</span>
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></svg>
+              </button>
+              <button class="clear-table" type="button" data-clear-table="bedding">Limpiar tabla</button>
+            </div>
+          </section>
+
+          <section class="table-panel hidden" id="cushionPractice">
+            <div class="table-toolbar">
+              <div>
+                <span>TABLA COMPLETA</span>
+                <strong>Cojines</strong>
+              </div>
+              <div class="fill-progress" aria-live="polite">
+                <strong id="cushionProgress">0 / 12</strong>
+                <span>CORRECTAS</span>
+              </div>
+            </div>
+            <div class="table-scroll cushion-scroll" tabindex="0" aria-label="Tabla de cojines">
+              <table class="practice-table cushion-table" id="cushionTable">
+                <thead><tr><th>TALLA</th><th>MEDIDA</th></tr></thead>
+                <tbody id="cushionTableBody"></tbody>
+              </table>
+            </div>
+            <div class="table-actions">
+              <button class="primary-button check-table" type="button" data-check-table="cushions">
+                <span>Revisar casillas llenadas</span>
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></svg>
+              </button>
+              <button class="clear-table" type="button" data-clear-table="cushions">Limpiar tabla</button>
+            </div>
+          </section>
+
+          <aside class="tip-card reveal delay-3">
+            <span class="tip-symbol">✦</span>
+            <p><strong>Completa de memoria</strong>Cada casilla se revisa al salir de ella. Verde es correcta; rojo indica que debes intentarlo otra vez.</p>
+          </aside>
+        </section>
+
+        <section class="view" id="quizView" aria-labelledby="quizTitle">
+          <div class="quiz-header reveal">
+            <p class="eyebrow">MEMORIA RÁPIDA</p>
+            <h1 id="quizTitle">Pon a prueba<br />lo aprendido.</h1>
+          </div>
+
+          <div class="stats-grid reveal delay-1" aria-label="Estadísticas de la sesión">
+            <div class="stat-card correct-stat"><span class="stat-icon">✓</span><strong id="correctStat">0</strong><small>CORRECTAS</small></div>
+            <div class="stat-card wrong-stat"><span class="stat-icon">×</span><strong id="wrongStat">0</strong><small>INCORRECTAS</small></div>
+            <div class="stat-card streak-stat"><span class="stat-icon flame">♨</span><strong id="streakStat">0</strong><small>RACHA</small></div>
+          </div>
+
+          <article class="question-card reveal delay-2" id="questionCard">
+            <div class="question-meta">
+              <span id="questionCategory">ROPA DE CAMA</span>
+              <span id="questionNumber">01</span>
+            </div>
+            <p class="question-text" id="questionText"></p>
+            <div class="options-list" id="optionsList"></div>
+            <div class="answer-note hidden" id="answerNote" aria-live="polite"></div>
+            <button class="primary-button next-question hidden" id="nextQuestionButton" type="button">
+              <span>Siguiente pregunta</span>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5" /></svg>
+            </button>
+          </article>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="Navegación principal">
+        <button class="nav-item active" type="button" data-view="practiceView" aria-current="page">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 19.5V5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0 0 4h12M8 7h6" /></svg>
+          <span>Completar</span>
+        </button>
+        <button class="nav-item" type="button" data-view="quizView">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 11a3 3 0 1 1 3.7 2.9c-.5.2-.7.6-.7 1.1v.3M12 19h.01M4 12a8 8 0 1 0 16 0 8 8 0 0 0-16 0Z" /></svg>
+          <span>Quiz</span>
+        </button>
+      </nav>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
