@@ -238,6 +238,22 @@ function clearFillTable(table) {
   showToast("Tabla limpia. Puedes comenzar de nuevo.");
 }
 
+function completeFillTable(table) {
+  const controls = $$(`.answer-control[data-table="${table}"]`);
+  controls.forEach((control) => {
+    const inputs = controlInputs(control);
+    if (control.dataset.kind === "measure") {
+      const [first, second] = control.dataset.answer.split("×").map((value) => value.trim());
+      inputs[0].value = first;
+      inputs[1].value = second;
+    } else {
+      inputs[0].value = control.dataset.answer;
+    }
+    validateTableControl(control, true);
+  });
+  showToast("Tabla completada. Ya puedes consultar todas las respuestas.");
+}
+
 function setupFillTables() {
   renderFillTables();
   $$(".table-input").forEach((input) => {
@@ -265,6 +281,7 @@ function setupFillTables() {
     });
   });
   $$("[data-check-table]").forEach((button) => button.addEventListener("click", () => checkFilledTable(button.dataset.checkTable)));
+  $$("[data-complete-table]").forEach((button) => button.addEventListener("click", () => completeFillTable(button.dataset.completeTable)));
   $$("[data-clear-table]").forEach((button) => button.addEventListener("click", () => clearFillTable(button.dataset.clearTable)));
 }
 

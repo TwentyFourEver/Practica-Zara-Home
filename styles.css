@@ -500,17 +500,38 @@ h1 {
   margin-top: 10px;
 }
 
+.secondary-table-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.complete-table,
 .clear-table {
-  display: block;
-  min-height: 38px;
-  margin: 4px auto 0;
-  padding: 0 15px;
-  border: 0;
-  background: transparent;
+  min-height: 42px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: #f7f3ec;
   color: var(--muted);
   font-family: var(--serif);
   font-size: 13px;
   cursor: pointer;
+  transition: border-color 160ms, background 160ms, color 160ms;
+}
+
+.complete-table {
+  border-color: var(--cream-deep);
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.complete-table:hover,
+.clear-table:hover {
+  border-color: var(--taupe);
+  background: #eee7dc;
+  color: var(--ink);
 }
 
 .cushion-scroll {
