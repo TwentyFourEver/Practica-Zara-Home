@@ -108,9 +108,21 @@ function showToast(message) {
 }
 
 function tableInput(answer, kind, label, table) {
-  return `<div class="cell-input-wrap">
-    <input class="table-input ${kind}" type="text" inputmode="numeric" autocomplete="off" spellcheck="false"
-      data-answer="${answer}" data-kind="${kind}" data-table="${table}" aria-label="${label}" />
+  const controlAttributes = `data-answer="${answer}" data-kind="${kind}" data-table="${table}"`;
+  if (kind === "measure") {
+    return `<div class="cell-input-wrap answer-control measure-pair" ${controlAttributes} role="group" aria-label="${label}">
+      <input class="table-input measure-part" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3"
+        autocomplete="off" spellcheck="false" data-part="0" aria-label="${label}, primer número" />
+      <span class="measure-separator" aria-hidden="true">×</span>
+      <input class="table-input measure-part" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3"
+        autocomplete="off" spellcheck="false" data-part="1" aria-label="${label}, segundo número" />
+      <span class="cell-mark" aria-hidden="true"></span>
+    </div>`;
+  }
+
+  return `<div class="cell-input-wrap answer-control" ${controlAttributes}>
+    <input class="table-input code" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3"
+      autocomplete="off" spellcheck="false" aria-label="${label}" />
     <span class="cell-mark" aria-hidden="true"></span>
   </div>`;
 }
@@ -143,53 +155,75 @@ function renderFillTables() {
     .join("");
 }
 
-function validateTableInput(input) {
-  const value = input.value.trim();
-  input.classList.remove("correct", "wrong");
-  input.removeAttribute("aria-invalid");
-  if (!value) {
-    updateFillProgress(input.dataset.table);
+function controlInputs(control) {
+  return control ? [...control.querySelectorAll(".table-input")] : [];
+}
+
+function controlIsBlank(control) {
+  return controlInputs(control).every((input) => !input.value.trim());
+}
+
+function controlIsComplete(control) {
+  return controlInputs(control).every((input) => input.value.trim());
+}
+
+function controlValue(control) {
+  const values = controlInputs(control).map((input) => input.value.trim());
+  return control.dataset.kind === "measure" ? values.join("x") : values[0];
+}
+
+function validateTableControl(control, force = false) {
+  control.classList.remove("correct", "wrong");
+  controlInputs(control).forEach((input) => input.removeAttribute("aria-invalid"));
+  if (controlIsBlank(control)) {
+    updateFillProgress(control.dataset.table);
     return null;
   }
 
-  const normalize = input.dataset.kind === "measure" ? normalizeMeasure : normalizeCode;
-  const isCorrect = normalize(value) === normalize(input.dataset.answer);
-  input.classList.add(isCorrect ? "correct" : "wrong");
-  if (!isCorrect) input.setAttribute("aria-invalid", "true");
-  updateFillProgress(input.dataset.table);
+  if (!controlIsComplete(control) && !force) {
+    updateFillProgress(control.dataset.table);
+    return null;
+  }
+
+  const normalize = control.dataset.kind === "measure" ? normalizeMeasure : normalizeCode;
+  const isCorrect = controlIsComplete(control) && normalize(controlValue(control)) === normalize(control.dataset.answer);
+  control.classList.add(isCorrect ? "correct" : "wrong");
+  if (!isCorrect) controlInputs(control).forEach((input) => input.setAttribute("aria-invalid", "true"));
+  updateFillProgress(control.dataset.table);
   return isCorrect;
 }
 
 function updateFillProgress(table) {
-  const inputs = $$(`.table-input[data-table="${table}"]`);
-  const correct = inputs.filter((input) => input.classList.contains("correct")).length;
+  const controls = $$(`.answer-control[data-table="${table}"]`);
+  const correct = controls.filter((control) => control.classList.contains("correct")).length;
   const target = table === "bedding" ? "#beddingProgress" : "#cushionProgress";
-  $(target).textContent = `${correct} / ${inputs.length}`;
+  $(target).textContent = `${correct} / ${controls.length}`;
 }
 
 function checkFilledTable(table) {
-  const inputs = $$(`.table-input[data-table="${table}"]`);
-  const filled = inputs.filter((input) => input.value.trim());
+  const controls = $$(`.answer-control[data-table="${table}"]`);
+  const filled = controls.filter((control) => !controlIsBlank(control));
   if (!filled.length) {
     showToast("La tabla está vacía. Escribe alguna respuesta primero.");
-    inputs[0].focus();
+    controlInputs(controls[0])[0].focus();
     return;
   }
 
-  const results = filled.map(validateTableInput);
+  const results = filled.map((control) => validateTableControl(control, true));
   const wrong = results.filter((result) => result === false).length;
-  const correct = inputs.filter((input) => input.classList.contains("correct")).length;
-  if (correct === inputs.length) {
+  const correct = controls.filter((control) => control.classList.contains("correct")).length;
+  if (correct === controls.length) {
     showToast("¡Tabla completa! Todas las respuestas son correctas.");
   } else if (wrong) {
     showToast(`${wrong} ${wrong === 1 ? "casilla necesita" : "casillas necesitan"} otro intento.`);
   } else {
-    showToast(`Muy bien. Te faltan ${inputs.length - correct} casillas por completar.`);
+    showToast(`Muy bien. Te faltan ${controls.length - correct} casillas por completar.`);
   }
 }
 
 function clearFillTable(table) {
-  const inputs = $$(`.table-input[data-table="${table}"]`);
+  const controls = $$(`.answer-control[data-table="${table}"]`);
+  const inputs = controls.flatMap(controlInputs);
   if (!inputs.some((input) => input.value)) {
     showToast("Esta tabla ya está vacía.");
     return;
@@ -197,9 +231,9 @@ function clearFillTable(table) {
   if (!window.confirm("¿Quieres borrar todas las respuestas de esta tabla?")) return;
   inputs.forEach((input) => {
     input.value = "";
-    input.classList.remove("correct", "wrong");
     input.removeAttribute("aria-invalid");
   });
+  controls.forEach((control) => control.classList.remove("correct", "wrong"));
   updateFillProgress(table);
   showToast("Tabla limpia. Puedes comenzar de nuevo.");
 }
@@ -207,18 +241,26 @@ function clearFillTable(table) {
 function setupFillTables() {
   renderFillTables();
   $$(".table-input").forEach((input) => {
-    input.addEventListener("change", () => validateTableInput(input));
+    const control = input.closest(".answer-control");
+    input.addEventListener("change", () => validateTableControl(control));
     input.addEventListener("input", () => {
-      input.classList.remove("correct", "wrong");
-      input.removeAttribute("aria-invalid");
-      updateFillProgress(input.dataset.table);
+      const numericValue = input.value.replace(/\D/g, "");
+      if (input.value !== numericValue) input.value = numericValue;
+      control.classList.remove("correct", "wrong");
+      controlInputs(control).forEach((field) => field.removeAttribute("aria-invalid"));
+      updateFillProgress(control.dataset.table);
     });
     input.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
         event.preventDefault();
-        validateTableInput(input);
-        const inputs = $$(".table-input");
-        inputs[inputs.indexOf(input) + 1]?.focus();
+        const fields = controlInputs(control);
+        if (control.dataset.kind === "measure" && input === fields[0]) {
+          fields[1].focus();
+          return;
+        }
+        validateTableControl(control, true);
+        const controls = $$(".answer-control");
+        controlInputs(controls[controls.indexOf(control) + 1])[0]?.focus();
       }
     });
   });
@@ -354,6 +396,7 @@ function updateStats(animate = false) {
 
 function resetProgress() {
   const tableInputs = $$(".table-input");
+  const tableControls = $$(".answer-control");
   const hasTableAnswers = tableInputs.some((input) => input.value.trim());
   const hasProgress = quizState.correct || quizState.wrong || quizState.streak || hasTableAnswers;
   if (!hasProgress) {
@@ -365,9 +408,9 @@ function resetProgress() {
 
   tableInputs.forEach((input) => {
     input.value = "";
-    input.classList.remove("correct", "wrong");
     input.removeAttribute("aria-invalid");
   });
+  tableControls.forEach((control) => control.classList.remove("correct", "wrong"));
   updateFillProgress("bedding");
   updateFillProgress("cushions");
   quizState = { correct: 0, wrong: 0, streak: 0, answered: 0 };

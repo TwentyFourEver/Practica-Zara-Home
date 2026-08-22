@@ -65,7 +65,7 @@ select:focus-visible {
   top: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   height: 64px;
   padding: env(safe-area-inset-top) 20px 0;
   border-bottom: 1px solid rgba(222, 217, 207, 0.78);
@@ -74,6 +74,8 @@ select:focus-visible {
 }
 
 .brand {
+  position: absolute;
+  left: 20px;
   color: var(--ink);
   font-family: var(--serif);
   font-size: 18px;
@@ -82,6 +84,8 @@ select:focus-visible {
 }
 
 .icon-button {
+  position: absolute;
+  left: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -94,6 +98,7 @@ select:focus-visible {
   background: rgba(255, 254, 251, 0.82);
   box-shadow: 0 4px 13px rgba(47, 40, 30, 0.06);
   cursor: pointer;
+  transform: translateX(-50%);
   transition: border-color 180ms ease, background 180ms ease, transform 150ms ease, box-shadow 180ms ease;
 }
 
@@ -104,7 +109,7 @@ select:focus-visible {
 }
 
 .icon-button:active {
-  transform: scale(0.96);
+  transform: translateX(-50%) scale(0.96);
 }
 
 .icon-button span {
@@ -389,6 +394,19 @@ h1 {
   width: 100%;
 }
 
+.measure-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 3px;
+  align-items: center;
+}
+
+.measure-separator {
+  color: var(--muted);
+  font-family: var(--serif);
+  font-size: 12px;
+}
+
 .table-input {
   width: 100%;
   height: 42px;
@@ -414,12 +432,21 @@ h1 {
   font-size: 12px;
 }
 
-.table-input.correct {
+.measure-pair .table-input {
+  min-width: 0;
+  padding: 0 3px;
+}
+
+.measure-pair .table-input:nth-of-type(2) {
+  padding-right: 17px;
+}
+
+.answer-control.correct .table-input {
   border-color: #8fa798;
   background: var(--green-bg);
 }
 
-.table-input.wrong {
+.answer-control.wrong .table-input {
   border-color: #c7968b;
   background: var(--red-bg);
 }
@@ -441,25 +468,25 @@ h1 {
   transition: 160ms ease;
 }
 
-.table-input.correct + .cell-mark,
-.table-input.wrong + .cell-mark {
+.answer-control.correct .cell-mark,
+.answer-control.wrong .cell-mark {
   opacity: 1;
   transform: translateY(-50%) scale(1);
 }
 
-.table-input.correct + .cell-mark {
+.answer-control.correct .cell-mark {
   background: var(--green);
 }
 
-.table-input.correct + .cell-mark::before {
+.answer-control.correct .cell-mark::before {
   content: "✓";
 }
 
-.table-input.wrong + .cell-mark {
+.answer-control.wrong .cell-mark {
   background: var(--red);
 }
 
-.table-input.wrong + .cell-mark::before {
+.answer-control.wrong .cell-mark::before {
   content: "×";
 }
 
@@ -1218,7 +1245,15 @@ h1 {
     box-shadow: 0 0 60px rgba(47, 40, 30, 0.08);
   }
 
-  .topbar,
+  .topbar {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+  }
+
+  .topbar .brand {
+    left: max(20px, calc((100vw - 520px) / 2 + 20px));
+  }
+
   .bottom-nav {
     right: auto;
     left: 50%;
