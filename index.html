@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#f6f3ed" />
     <meta name="description" content="Práctica móvil de tallas y medidas para ropa de cama y cojines." />
     <title>Casa — Tallas y medidas</title>
-    <link rel="stylesheet" href="styles.css?v=6" />
+    <link rel="stylesheet" href="styles.css?v=7" />
   </head>
   <body>
     <div class="app-shell">
@@ -101,6 +101,202 @@
           </aside>
         </section>
 
+        <section class="view" id="learnView" aria-labelledby="learnTitle">
+          <div class="learn-header reveal">
+            <p class="eyebrow">GUÍA PARA NO CONFUNDIRLAS</p>
+            <h1 id="learnTitle">Aprende por<br />patrones.</h1>
+            <p>No memorices cada dato por separado. Ubica primero la familia, recuerda su número ancla y después aprende solamente sus excepciones.</p>
+          </div>
+
+          <ol class="learning-method reveal delay-1" aria-label="Método de estudio en tres pasos">
+            <li><span>01</span><div><strong>Familia</strong><small>¿Cama o cojín?</small></div></li>
+            <li><span>02</span><div><strong>Ancla</strong><small>Empieza por el ancho.</small></div></li>
+            <li><span>03</span><div><strong>Excepción</strong><small>Compara la talla vecina.</small></div></li>
+          </ol>
+
+          <section class="learning-section reveal delay-2" aria-labelledby="bedLearningTitle">
+            <div class="section-heading">
+              <div>
+                <span>ROPA DE CAMA</span>
+                <h2 id="bedLearningTitle">La escalera de anchos</h2>
+              </div>
+              <span class="section-count">6 tallas</span>
+            </div>
+
+            <div class="size-ladder" aria-label="Secuencia de anchos de cama">
+              <span><strong>60</strong><small>Cuna</small></span>
+              <i>→</i>
+              <span><strong>90</strong><small>Individual</small></span>
+              <i>→</i>
+              <span><strong>140</strong><small>Matri</small></span>
+              <i>→</i>
+              <span><strong>160</strong><small>Queen</small></span>
+              <i>→</i>
+              <span><strong>200</strong><small>King</small></span>
+            </div>
+            <p class="ladder-note"><strong>Regla base:</strong> 60 · 90 · 140 · 160 · 200 es el ancho de la bajera. “Alta” conserva 200 y crece en las piezas superiores.</p>
+
+            <div class="size-guides">
+              <details class="size-guide" open>
+                <summary>
+                  <span class="guide-number">01</span>
+                  <span class="guide-title"><strong>Cuna</strong><small>Ancla 60 · predomina la talla 10</small></span>
+                  <span class="guide-anchor">60</span>
+                </summary>
+                <div class="guide-body">
+                  <p class="memory-hook"><strong>Recuerda “60–100–30”.</strong> La cama mide 60 de ancho, las piezas grandes empiezan en 100 y la funda en 30.</p>
+                  <dl class="measure-list">
+                    <div><dt>Bajera</dt><dd><strong>60 × 120</strong><span>Talla 10</span></dd></div>
+                    <div><dt>Encimera</dt><dd><strong>100 × 150</strong><span>Talla 10</span></dd></div>
+                    <div><dt>Duvet</dt><dd><strong>100 × 120</strong><span>Talla 10</span></dd></div>
+                    <div><dt>Fundas</dt><dd><strong>30 × 50</strong><span>Talla 20</span></dd></div>
+                    <div><dt>Colcha</dt><dd><strong>100 × 120</strong><span>Talla 10</span></dd></div>
+                    <div><dt>Edredón</dt><dd><strong>100 × 120</strong><span>Talla 40</span></dd></div>
+                  </dl>
+                  <p class="confusion-alert"><span>!</span><strong>No confundas:</strong> la misma medida 100 × 120 usa talla 10 en duvet y colcha, pero talla 40 en edredón.</p>
+                </div>
+              </details>
+
+              <details class="size-guide">
+                <summary>
+                  <span class="guide-number">02</span>
+                  <span class="guide-title"><strong>Individual Twin</strong><small>Ancla 90 · la familia del 12</small></span>
+                  <span class="guide-anchor">90</span>
+                </summary>
+                <div class="guide-body">
+                  <p class="memory-hook"><strong>Recuerda “90–150/160–180”.</strong> Bajera 90, duvet 150, encimera 160 y las coberturas 180.</p>
+                  <dl class="measure-list">
+                    <div><dt>Bajera</dt><dd><strong>90 × 200</strong><span>Talla 12</span></dd></div>
+                    <div><dt>Encimera</dt><dd><strong>160 × 280</strong><span>Talla 12</span></dd></div>
+                    <div><dt>Duvet</dt><dd><strong>150 × 220</strong><span>Talla 12</span></dd></div>
+                    <div><dt>Fundas</dt><dd><strong>50 × 75</strong><span>Talla 28</span></dd></div>
+                    <div><dt>Colcha</dt><dd><strong>180 × 250</strong><span>Talla 20</span></dd></div>
+                    <div><dt>Edredón</dt><dd><strong>180 × 250</strong><span>Talla 45</span></dd></div>
+                  </dl>
+                  <p class="confusion-alert"><span>!</span><strong>No confundas:</strong> encimera y duvet son talla 12, pero sus anchos van al revés de lo esperado: 160 y 150.</p>
+                </div>
+              </details>
+
+              <details class="size-guide">
+                <summary>
+                  <span class="guide-number">03</span>
+                  <span class="guide-title"><strong>Matrimonial Full</strong><small>Ancla 140 · 210, 220, 230</small></span>
+                  <span class="guide-anchor">140</span>
+                </summary>
+                <div class="guide-body">
+                  <p class="memory-hook"><strong>Recuerda la escalera “210–220–230”.</strong> Encimera 210, duvet 220 y coberturas 230.</p>
+                  <dl class="measure-list">
+                    <div><dt>Bajera</dt><dd><strong>140 × 200</strong><span>Talla 21</span></dd></div>
+                    <div><dt>Encimera</dt><dd><strong>210 × 280</strong><span>Talla 14</span></dd></div>
+                    <div><dt>Duvet</dt><dd><strong>220 × 220</strong><span>Talla 14</span></dd></div>
+                    <div><dt>Fundas</dt><dd><strong>50 × 75</strong><span>Talla 28</span></dd></div>
+                    <div><dt>Colcha</dt><dd><strong>230 × 250</strong><span>Talla 19</span></dd></div>
+                    <div><dt>Edredón</dt><dd><strong>230 × 250</strong><span>Talla 46</span></dd></div>
+                  </dl>
+                  <p class="confusion-alert"><span>!</span><strong>No confundas:</strong> la bajera mide 140 pero es talla 21; encimera y duvet usan talla 14.</p>
+                </div>
+              </details>
+
+              <details class="size-guide">
+                <summary>
+                  <span class="guide-number">04</span>
+                  <span class="guide-title"><strong>Queen Grande</strong><small>Ancla 160 · pareja del 16</small></span>
+                  <span class="guide-anchor">160</span>
+                </summary>
+                <div class="guide-body">
+                  <p class="memory-hook"><strong>Recuerda “160–240”.</strong> La bajera empieza en 160; encimera y duvet empiezan en 240 y ambos son talla 16.</p>
+                  <dl class="measure-list">
+                    <div><dt>Bajera</dt><dd><strong>160 × 200</strong><span>Talla 17</span></dd></div>
+                    <div><dt>Encimera</dt><dd><strong>240 × 280</strong><span>Talla 16</span></dd></div>
+                    <div><dt>Duvet</dt><dd><strong>240 × 220</strong><span>Talla 16</span></dd></div>
+                    <div><dt>Fundas</dt><dd><strong>50 × 75</strong><span>Talla 28</span></dd></div>
+                    <div><dt>Colcha</dt><dd><strong>230 × 250</strong><span>Talla 19</span></dd></div>
+                    <div><dt>Edredón</dt><dd><strong>230 × 250</strong><span>Talla 46</span></dd></div>
+                  </dl>
+                  <p class="confusion-alert"><span>!</span><strong>No confundas con Matrimonial:</strong> fundas, colcha y edredón son iguales. Solo memoriza la diferencia en bajera, encimera y duvet.</p>
+                </div>
+              </details>
+
+              <details class="size-guide">
+                <summary>
+                  <span class="guide-number">05</span>
+                  <span class="guide-title"><strong>King California</strong><small>Ancla 200 · familia 260/270</small></span>
+                  <span class="guide-anchor">200</span>
+                </summary>
+                <div class="guide-body">
+                  <p class="memory-hook"><strong>Recuerda “200–260–270–95”.</strong> Bajera 200, duvet 260, piezas largas 270 y funda de 95.</p>
+                  <dl class="measure-list">
+                    <div><dt>Bajera</dt><dd><strong>200 × 200</strong><span>Talla 19</span></dd></div>
+                    <div><dt>Encimera</dt><dd><strong>270 × 280</strong><span>Talla 18</span></dd></div>
+                    <div><dt>Duvet</dt><dd><strong>260 × 240</strong><span>Talla 24</span></dd></div>
+                    <div><dt>Fundas</dt><dd><strong>50 × 95</strong><span>Talla 27</span></dd></div>
+                    <div><dt>Colcha</dt><dd><strong>270 × 280</strong><span>Talla 24</span></dd></div>
+                    <div><dt>Edredón</dt><dd><strong>270 × 280</strong><span>Talla 63</span></dd></div>
+                  </dl>
+                  <p class="confusion-alert"><span>!</span><strong>No confundas:</strong> 270 × 280 aparece tres veces, pero cambia de talla: 18, 24 y 63 según el producto.</p>
+                </div>
+              </details>
+
+              <details class="size-guide">
+                <summary>
+                  <span class="guide-number">06</span>
+                  <span class="guide-title"><strong>King California Alta</strong><small>Ancla 290 · solo cambian dos piezas</small></span>
+                  <span class="guide-anchor">290</span>
+                </summary>
+                <div class="guide-body">
+                  <p class="memory-hook"><strong>Recuerda “Alta = 290”.</strong> Frente a King normal, únicamente suben la encimera y el duvet.</p>
+                  <dl class="measure-list">
+                    <div><dt>Bajera</dt><dd><strong>200 × 200</strong><span>Talla 19</span></dd></div>
+                    <div><dt>Encimera</dt><dd><strong>290 × 280</strong><span>Talla 19</span></dd></div>
+                    <div><dt>Duvet</dt><dd><strong>290 × 260</strong><span>Talla 19</span></dd></div>
+                    <div><dt>Fundas</dt><dd><strong>50 × 95</strong><span>Talla 27</span></dd></div>
+                    <div><dt>Colcha</dt><dd><strong>270 × 280</strong><span>Talla 24</span></dd></div>
+                    <div><dt>Edredón</dt><dd><strong>270 × 280</strong><span>Talla 63</span></dd></div>
+                  </dl>
+                  <p class="confusion-alert"><span>!</span><strong>No confundas con King:</strong> bajera, fundas, colcha y edredón no cambian. En Alta, encimera y duvet comienzan en 290 y son talla 19.</p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <section class="learning-section cushion-learning reveal delay-3" aria-labelledby="cushionLearningTitle">
+            <div class="section-heading">
+              <div>
+                <span>COJINES</span>
+                <h2 id="cushionLearningTitle">Dos rectángulos, cuatro cuadrados</h2>
+              </div>
+              <span class="section-count">6 tallas</span>
+            </div>
+
+            <div class="cushion-memory-grid">
+              <article><span>60</span><strong>30 × 40</strong><small>Rectángulo corto</small></article>
+              <article><span>61</span><strong>30 × 50</strong><small>Rectángulo largo</small></article>
+              <article><span>62</span><strong>40 × 40</strong><small>Cuadrado base</small></article>
+              <article class="watch"><span>63</span><strong>50 × 50</strong><small>Va antes del 45</small></article>
+              <article class="watch"><span>64</span><strong>45 × 45</strong><small>La excepción</small></article>
+              <article><span>66</span><strong>60 × 60</strong><small>El más grande</small></article>
+            </div>
+
+            <div class="cushion-rule">
+              <span>60–61</span>
+              <p><strong>Mismo inicio:</strong> ambos miden 30 de ancho; el segundo lado sube de 40 a 50.</p>
+            </div>
+            <div class="cushion-rule">
+              <span>62–66</span>
+              <p><strong>Son cuadrados.</strong> Memoriza 40, 50, 45 y 60.</p>
+            </div>
+            <p class="confusion-alert standout"><span>!</span><strong>Trampa principal:</strong> las tallas 63 y 64 no crecen en orden. 63 es 50 × 50 y 64 baja a 45 × 45.</p>
+          </section>
+
+          <aside class="study-plan reveal delay-3">
+            <span class="tip-symbol">✦</span>
+            <div>
+              <strong>Rutina de 3 minutos</strong>
+              <p>Lee una tarjeta, ciérrala y repite su ancla. Luego ve a <b>Quiz</b>. Estudia primero las alertas: ahí están las confusiones más probables.</p>
+            </div>
+          </aside>
+        </section>
+
         <section class="view" id="quizView" aria-labelledby="quizTitle">
           <div class="quiz-header reveal">
             <p class="eyebrow">MEMORIA RÁPIDA</p>
@@ -140,6 +336,10 @@
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 19.5V5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0 0 4h12M8 7h6" /></svg>
           <span>Completar</span>
         </button>
+        <button class="nav-item" type="button" data-view="learnView">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v16H6.5A2.5 2.5 0 0 0 4 21.5v-16ZM20 5.5A2.5 2.5 0 0 0 17.5 3H13v16h4.5a2.5 2.5 0 0 1 2.5 2.5v-16Z" /></svg>
+          <span>Aprender</span>
+        </button>
         <button class="nav-item" type="button" data-view="quizView">
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 11a3 3 0 1 1 3.7 2.9c-.5.2-.7.6-.7 1.1v.3M12 19h.01M4 12a8 8 0 1 0 16 0 8 8 0 0 0-16 0Z" /></svg>
           <span>Quiz</span>
@@ -148,6 +348,6 @@
 
       <div class="toast" id="toast" role="status" aria-live="polite"></div>
     </div>
-    <script src="app.js?v=6"></script>
+    <script src="app.js?v=7"></script>
   </body>
 </html>
