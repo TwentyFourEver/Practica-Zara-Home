@@ -51,8 +51,21 @@ let quizLocked = false;
 let quizState = loadQuizState();
 let toastTimer;
 let audioContext;
+let errorAudio;
 
 function playQuizSound(isCorrect) {
+  if (!isCorrect) {
+    try {
+      errorAudio ??= new Audio("assets/audio/quiz-error.mp3");
+      errorAudio.volume = 0.72;
+      errorAudio.currentTime = 0;
+      errorAudio.play().catch(() => {});
+    } catch {
+      // El quiz sigue funcionando si el navegador bloquea el audio.
+    }
+    return;
+  }
+
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   if (!AudioContext) return;
 
@@ -67,19 +80,20 @@ function playQuizSound(isCorrect) {
     masterGain.gain.exponentialRampToValueAtTime(0.0001, start + (isCorrect ? 0.52 : 0.42));
     masterGain.connect(audioContext.destination);
 
-    const notes = isCorrect
-      ? [{ frequency: 523.25, delay: 0 }, { frequency: 659.25, delay: 0.12 }, { frequency: 783.99, delay: 0.24 }]
-      : [{ frequency: 220, delay: 0 }, { frequency: 164.81, delay: 0.16 }];
+    const notes = [
+      { frequency: 523.25, delay: 0 },
+      { frequency: 659.25, delay: 0.12 },
+      { frequency: 783.99, delay: 0.24 }
+    ];
 
     notes.forEach(({ frequency, delay }) => {
       const oscillator = audioContext.createOscillator();
       const noteGain = audioContext.createGain();
       const noteStart = start + delay;
-      const noteEnd = noteStart + (isCorrect ? 0.2 : 0.24);
+      const noteEnd = noteStart + 0.2;
 
-      oscillator.type = isCorrect ? "sine" : "triangle";
+      oscillator.type = "sine";
       oscillator.frequency.setValueAtTime(frequency, noteStart);
-      if (!isCorrect) oscillator.frequency.exponentialRampToValueAtTime(frequency * 0.84, noteEnd);
       noteGain.gain.setValueAtTime(0.0001, noteStart);
       noteGain.gain.exponentialRampToValueAtTime(1, noteStart + 0.01);
       noteGain.gain.exponentialRampToValueAtTime(0.0001, noteEnd);
