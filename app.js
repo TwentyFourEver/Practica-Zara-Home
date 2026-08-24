@@ -439,6 +439,13 @@ function submitQuizAnswer(event) {
   note.classList.toggle("wrong", !isCorrect);
   note.classList.remove("hidden");
   $("#nextQuestionButton").classList.remove("hidden");
+
+  requestAnimationFrame(() => {
+    note.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "center"
+    });
+  });
 }
 
 function updateStats(animate = false) {
