@@ -1586,6 +1586,22 @@ h1 {
   transform: translateY(0);
 }
 
+.youtube-sound-player {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.youtube-sound-player iframe {
+  width: 1px;
+  height: 1px;
+  border: 0;
+}
+
 .hidden {
   display: none !important;
 }

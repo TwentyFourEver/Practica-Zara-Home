@@ -52,6 +52,47 @@ let quizState = loadQuizState();
 let toastTimer;
 let audioContext;
 let errorAudio;
+let successPlayer;
+let successPlayerReady = false;
+
+window.onYouTubeIframeAPIReady = () => {
+  if (!window.YT?.Player) return;
+
+  successPlayer = new window.YT.Player("successSoundPlayer", {
+    width: "1",
+    height: "1",
+    videoId: "GYefSfSrqyI",
+    playerVars: {
+      autoplay: 0,
+      controls: 0,
+      disablekb: 1,
+      fs: 0,
+      playsinline: 1,
+      rel: 0
+    },
+    events: {
+      onReady: () => {
+        successPlayerReady = true;
+        successPlayer.setVolume(72);
+      },
+      onError: () => {
+        successPlayerReady = false;
+      }
+    }
+  });
+};
+
+function playYouTubeSuccessSound() {
+  if (!successPlayerReady || !successPlayer) return false;
+
+  try {
+    successPlayer.seekTo(0, true);
+    successPlayer.playVideo();
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 function playQuizSound(isCorrect) {
   if (!isCorrect) {
@@ -65,6 +106,8 @@ function playQuizSound(isCorrect) {
     }
     return;
   }
+
+  if (playYouTubeSuccessSound()) return;
 
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   if (!AudioContext) return;
