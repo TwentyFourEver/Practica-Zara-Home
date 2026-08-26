@@ -170,6 +170,11 @@ const mapZones = [
   { id: "7", name: "Expo caja" }
 ];
 
+const mapWalls = Array.from({ length: 22 }, (_, index) => ({
+  id: String(index + 1),
+  name: `Pared ${index + 1}`
+}));
+
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
@@ -178,6 +183,7 @@ let quizLocked = false;
 let quizMode = "measurements";
 let quizState = loadQuizState();
 let quizHistory = loadQuizHistory();
+let mapMastery = loadMapMastery();
 let toastTimer;
 let audioContext;
 let errorAudio;
@@ -338,6 +344,19 @@ function loadQuizHistory() {
 
 function saveQuizHistory() {
   localStorage.setItem("casaQuizHistory", JSON.stringify(quizHistory));
+}
+
+function loadMapMastery() {
+  try {
+    const stored = JSON.parse(localStorage.getItem("casaMapMastery"));
+    return Array.isArray(stored) ? stored.filter((item) => typeof item === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveMapMastery() {
+  localStorage.setItem("casaMapMastery", JSON.stringify(mapMastery));
 }
 
 function takeUnseenQuestion(mode, bank) {
@@ -666,13 +685,18 @@ function makeStoreQuestion(item) {
   };
 }
 
-function makeMapQuestion(zone) {
+function makeMapQuestion(target) {
+  const label = target.type === "zone" ? `Zona ${target.id}` : `Pared ${target.id}`;
   return {
-    category: "CROQUIS",
-    question: `¿Dónde está la <strong>Zona ${zone.id}</strong>?`,
-    answer: zone.id,
+    category: target.type === "zone" ? "CROQUIS · ZONA" : "CROQUIS · PARED",
+    question: `¿Dónde está la <strong>${label}</strong>?`,
+    answer: `${target.type}:${target.id}`,
     answerKind: "map",
-    explanation: `La Zona ${zone.id} corresponde a ${zone.name}.`
+    masteryId: `map:${target.type}:${target.id}`,
+    targetType: target.type,
+    explanation: target.type === "zone"
+      ? `La Zona ${target.id} corresponde a ${target.name}.`
+      : `La Pared ${target.id} está marcada en verde en el croquis.`
   };
 }
 
@@ -696,10 +720,16 @@ function storeQuestionBank() {
 }
 
 function mapQuestionBank() {
-  return mapZones.map((zone) => ({
-    id: `map:${zone.id}`,
-    create: () => makeMapQuestion(zone)
+  const targets = [
+    ...mapZones.map((zone) => ({ ...zone, type: "zone" })),
+    ...mapWalls.map((wall) => ({ ...wall, type: "wall" }))
+  ];
+  const completeBank = targets.map((target) => ({
+    id: `map:${target.type}:${target.id}`,
+    create: () => makeMapQuestion(target)
   }));
+  const pendingBank = completeBank.filter((item) => !mapMastery.includes(item.id));
+  return pendingBank.length ? pendingBank : completeBank;
 }
 
 function setupQuizMap() {
@@ -714,18 +744,24 @@ function setupQuizMap() {
   quizMap.classList.add("quiz-store-plan");
   quizMap.setAttribute("role", "group");
   quizMap.setAttribute("aria-label", "Croquis interactivo de las zonas de la tienda");
-  const hotspotGroup = quizMap.querySelector(".zone-hotspots");
-  hotspotGroup?.removeAttribute("aria-hidden");
+  quizMap.querySelectorAll(".zone-hotspots, .wall-hotspots").forEach((group) => group.removeAttribute("aria-hidden"));
 
-  quizMap.querySelectorAll(".zone-hit").forEach((hotspot) => {
-    const zone = hotspot.dataset.zone;
+  quizMap.querySelectorAll(".map-hit").forEach((hotspot) => {
+    const targetType = hotspot.dataset.type;
+    const targetId = hotspot.dataset.id;
+    if (targetType !== currentQuestion.targetType) {
+      hotspot.classList.add("inactive-target");
+      return;
+    }
+    const targetKey = `${targetType}:${targetId}`;
+    const targetLabel = targetType === "zone" ? `Zona ${targetId}` : `Pared ${targetId}`;
     hotspot.setAttribute("role", "button");
     hotspot.setAttribute("tabindex", "0");
-    hotspot.setAttribute("aria-label", `Seleccionar Zona ${zone}`);
+    hotspot.setAttribute("aria-label", `Seleccionar ${targetLabel}`);
     const selectZone = () => {
       if (quizLocked) return;
-      currentQuestion.selectedMapZone = zone;
-      quizMap.querySelectorAll(".zone-hit").forEach((item) => item.classList.remove("selected"));
+      currentQuestion.selectedMapTarget = targetKey;
+      quizMap.querySelectorAll(".map-hit").forEach((item) => item.classList.remove("selected"));
       hotspot.classList.add("selected");
       $("#quizAnswerFields").classList.remove("correct", "wrong");
     };
@@ -753,7 +789,10 @@ function createQuestion() {
   $("#questionNumber").textContent = String(((visibleNumber - 1) % 99) + 1).padStart(2, "0");
   $("#questionText").innerHTML = currentQuestion.question;
   $("#quizAnswerFields").innerHTML = currentQuestion.answerKind === "map"
-    ? `<div class="quiz-map-shell"><p class="quiz-map-instruction">Toca la zona correcta</p><div class="quiz-map-frame" id="quizMapFrame"></div></div>`
+    ? `<div class="quiz-map-shell">
+        <div class="quiz-map-toolbar"><p class="quiz-map-instruction">Toca ${currentQuestion.targetType === "zone" ? "la zona" : "la pared"} correcta</p><p class="map-mastery"><strong id="mapMasteryCount">${mapMastery.length}</strong> / 29 DOMINADAS</p></div>
+        <div class="quiz-map-frame" id="quizMapFrame"></div>
+      </div>`
     : currentQuestion.answerKind === "choice"
       ? `<fieldset class="quiz-options"><legend>ELIGE UNA RESPUESTA</legend>
       ${currentQuestion.choices.map((choice) => `<label><input class="quiz-choice" type="radio" name="quiz-choice" value="${choice}" /><span>${choice}</span></label>`).join("")}
@@ -794,8 +833,8 @@ function submitQuizAnswer(event) {
   if (quizLocked) return;
   const inputs = $$("#quizAnswerFields .quiz-input");
   const selectedChoice = $("#quizAnswerFields .quiz-choice:checked");
-  if (currentQuestion.answerKind === "map" && !currentQuestion.selectedMapZone) {
-    showToast("Toca una zona del mapa antes de comprobar.");
+  if (currentQuestion.answerKind === "map" && !currentQuestion.selectedMapTarget) {
+    showToast(`Toca ${currentQuestion.targetType === "zone" ? "una zona" : "una pared"} del mapa antes de comprobar.`);
     return;
   }
   if (currentQuestion.answerKind === "choice" && !selectedChoice) {
@@ -809,7 +848,7 @@ function submitQuizAnswer(event) {
   }
 
   const response = currentQuestion.answerKind === "map"
-    ? currentQuestion.selectedMapZone
+    ? currentQuestion.selectedMapTarget
     : currentQuestion.answerKind === "choice"
       ? selectedChoice.value
       : currentQuestion.answerKind === "measure"
@@ -833,10 +872,11 @@ function submitQuizAnswer(event) {
   const quizMap = $("#quizAnswerFields .quiz-store-plan");
   if (quizMap) {
     quizMap.classList.add("locked");
-    quizMap.querySelectorAll(".zone-hit").forEach((hotspot) => {
+    quizMap.querySelectorAll(".map-hit").forEach((hotspot) => {
       hotspot.removeAttribute("tabindex");
-      if (hotspot.dataset.zone === currentQuestion.answer) hotspot.classList.add("correct-answer");
-      else if (hotspot.dataset.zone === currentQuestion.selectedMapZone) hotspot.classList.add("wrong-answer");
+      const targetKey = `${hotspot.dataset.type}:${hotspot.dataset.id}`;
+      if (targetKey === currentQuestion.answer) hotspot.classList.add("correct-answer");
+      else if (targetKey === currentQuestion.selectedMapTarget) hotspot.classList.add("wrong-answer");
     });
   }
   $(".quiz-check-button").classList.add("hidden");
@@ -846,6 +886,12 @@ function submitQuizAnswer(event) {
   if (isCorrect) {
     stats.correct += 1;
     stats.streak += 1;
+    if (currentQuestion.answerKind === "map" && !mapMastery.includes(currentQuestion.masteryId)) {
+      mapMastery.push(currentQuestion.masteryId);
+      saveMapMastery();
+      const masteryCounter = $("#mapMasteryCount");
+      if (masteryCounter) masteryCounter.textContent = mapMastery.length;
+    }
   } else {
     stats.wrong += 1;
     stats.streak = 0;
@@ -910,8 +956,10 @@ function resetProgress() {
     store: { used: [], last: null },
     map: { used: [], last: null }
   };
+  mapMastery = [];
   saveQuizState();
   saveQuizHistory();
+  saveMapMastery();
   updateStats();
   if (currentQuestion) createQuestion();
   showToast("Práctica reiniciada. Empecemos de nuevo.");

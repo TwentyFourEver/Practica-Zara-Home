@@ -1575,12 +1575,21 @@ h1 {
   background: #fbfaf7;
 }
 
-.zone-hotspots {
+.zone-hotspots,
+.wall-hotspots {
   display: none;
 }
 
 .quiz-map-shell {
   margin-top: -8px;
+}
+
+.quiz-map-toolbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 9px;
 }
 
 .quiz-map-instruction {
@@ -1590,6 +1599,25 @@ h1 {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+}
+
+.quiz-map-toolbar .quiz-map-instruction {
+  margin: 0;
+}
+
+.map-mastery {
+  flex: 0 0 auto;
+  margin: 0;
+  color: var(--taupe);
+  font-size: 7px;
+  letter-spacing: 0.08em;
+}
+
+.map-mastery strong {
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 12px;
+  font-weight: 400;
 }
 
 .quiz-map-frame {
@@ -1605,18 +1633,36 @@ h1 {
   background: #fbfaf7;
 }
 
-.quiz-store-plan .zone-hotspots {
+.quiz-store-plan .zone-hotspots,
+.quiz-store-plan .wall-hotspots {
   display: block;
 }
 
-.quiz-store-plan .zone-hit {
-  fill: rgba(178, 153, 116, 0.1);
-  stroke: rgba(105, 91, 70, 0.68);
-  stroke-dasharray: 4 3;
-  stroke-width: 1.4;
+.quiz-store-plan .zone-labels,
+.quiz-store-plan .wall-labels {
+  opacity: 0;
+}
+
+.quiz-store-plan .map-hit {
+  fill: transparent;
+  stroke: transparent;
   cursor: pointer;
   pointer-events: all;
   transition: fill 140ms, stroke 140ms, stroke-width 140ms;
+}
+
+.quiz-store-plan .zone-hit {
+  stroke-width: 1.4;
+}
+
+.quiz-store-plan .wall-hit {
+  fill: transparent;
+  stroke: none;
+  pointer-events: all;
+}
+
+.quiz-store-plan .map-hit.inactive-target {
+  pointer-events: none;
 }
 
 .quiz-store-plan .zone-hit:hover,
@@ -1627,11 +1673,21 @@ h1 {
   outline: none;
 }
 
+.quiz-store-plan .wall-hit:hover,
+.quiz-store-plan .wall-hit:focus {
+  fill: rgba(178, 153, 116, 0.7);
+  outline: none;
+}
+
 .quiz-store-plan .zone-hit.selected {
   fill: rgba(178, 153, 116, 0.34);
   stroke: var(--ink);
   stroke-dasharray: none;
   stroke-width: 2.5;
+}
+
+.quiz-store-plan .wall-hit.selected {
+  fill: var(--ink);
 }
 
 .quiz-store-plan .zone-hit.correct-answer {
@@ -1641,6 +1697,10 @@ h1 {
   stroke-width: 3;
 }
 
+.quiz-store-plan .wall-hit.correct-answer {
+  fill: var(--green);
+}
+
 .quiz-store-plan .zone-hit.wrong-answer {
   fill: rgba(173, 96, 80, 0.38);
   stroke: var(--red);
@@ -1648,7 +1708,11 @@ h1 {
   stroke-width: 3;
 }
 
-.quiz-store-plan.locked .zone-hit {
+.quiz-store-plan .wall-hit.wrong-answer {
+  fill: var(--red);
+}
+
+.quiz-store-plan.locked .map-hit {
   cursor: default;
   pointer-events: none;
 }

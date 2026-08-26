@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#f6f3ed" />
     <meta name="description" content="Práctica móvil de tallas y medidas para ropa de cama y cojines." />
     <title>Casa — Tallas y medidas</title>
-    <link rel="stylesheet" href="styles.css?v=15" />
+    <link rel="stylesheet" href="styles.css?v=16" />
   </head>
   <body>
     <div class="app-shell">
@@ -556,13 +556,38 @@
                 </g>
 
                 <g class="zone-hotspots" aria-hidden="true">
-                  <path class="zone-hit" data-zone="1" d="M29 334H145V478H29Z" />
-                  <path class="zone-hit" data-zone="2" d="M29 189H115V316H29Z" />
-                  <path class="zone-hit" data-zone="3" d="M29 59H142V171H29Z" />
-                  <path class="zone-hit" data-zone="4" d="M278 59H331V171H278Z" />
-                  <path class="zone-hit" data-zone="5" d="M278 189H331V316H278Z" />
-                  <path class="zone-hit" data-zone="6" d="M233 334H331V436H233Z" />
-                  <path class="zone-hit" data-zone="7" d="M116 221H274V326H116Z" />
+                  <path class="map-hit zone-hit" data-type="zone" data-id="1" d="M29 334H145V478H29Z" />
+                  <path class="map-hit zone-hit" data-type="zone" data-id="2" d="M29 189H115V316H29Z" />
+                  <path class="map-hit zone-hit" data-type="zone" data-id="3" d="M29 59H142V171H29Z" />
+                  <path class="map-hit zone-hit" data-type="zone" data-id="4" d="M278 59H331V171H278Z" />
+                  <path class="map-hit zone-hit" data-type="zone" data-id="5" d="M278 189H331V316H278Z" />
+                  <path class="map-hit zone-hit" data-type="zone" data-id="6" d="M233 334H331V436H233Z" />
+                  <path class="map-hit zone-hit" data-type="zone" data-id="7" d="M116 221H274V326H116Z" />
+                </g>
+
+                <g class="wall-hotspots" aria-hidden="true">
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="1" x="25" y="480" width="125" height="10" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="2" x="20" y="405" width="10" height="80" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="3" x="20" y="330" width="10" height="75" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="4" x="25" y="326" width="80" height="8" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="5" x="25" y="316" width="80" height="8" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="6" x="20" y="185" width="10" height="135" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="7" x="25" y="181" width="80" height="8" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="8" x="25" y="171" width="80" height="8" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="9" x="20" y="55" width="10" height="120" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="10" x="25" y="50" width="80" height="10" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="11" x="155" y="50" width="120" height="10" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="12" x="120" y="220" width="150" height="10" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="13" x="305" y="50" width="30" height="10" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="14" x="330" y="55" width="10" height="120" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="15" x="275" y="171" width="60" height="8" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="16" x="275" y="181" width="60" height="8" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="17" x="330" y="185" width="10" height="67" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="18" x="330" y="252" width="10" height="68" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="19" x="275" y="316" width="60" height="8" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="20" x="275" y="326" width="60" height="8" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="21" x="330" y="330" width="10" height="110" />
+                  <rect class="map-hit wall-hit" data-type="wall" data-id="22" x="230" y="435" width="105" height="10" />
                 </g>
               </svg>
               <figcaption>Distribución fiel al croquis original · paredes 1–22</figcaption>
@@ -590,7 +615,7 @@
               <span>02</span><strong>Tienda</strong><small>Manual, códigos y croquis</small>
             </button>
             <button class="quiz-mode-button" type="button" data-quiz-mode="map" aria-pressed="false">
-              <span>03</span><strong>Croquis</strong><small>Toca la zona en el mapa</small>
+              <span>03</span><strong>Croquis</strong><small>Toca zonas y paredes</small>
             </button>
           </div>
 
@@ -642,7 +667,7 @@
         <div id="successSoundPlayer"></div>
       </div>
     </div>
-    <script src="app.js?v=18"></script>
+    <script src="app.js?v=19"></script>
     <script src="https://www.youtube.com/iframe_api" async></script>
   </body>
 </html>
