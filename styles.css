@@ -875,7 +875,7 @@ h1 {
 
 .quiz-mode-switch {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
   margin-bottom: 12px;
 }
@@ -883,7 +883,7 @@ h1 {
 .quiz-mode-button {
   position: relative;
   min-height: 82px;
-  padding: 12px 12px 11px;
+  padding: 12px 9px 11px;
   border: 1px solid var(--line);
   border-radius: 3px;
   background: var(--white);
@@ -908,7 +908,7 @@ h1 {
 
 .quiz-mode-button strong {
   font-family: var(--serif);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 400;
 }
 
@@ -1573,6 +1573,89 @@ h1 {
   width: 100%;
   height: auto;
   background: #fbfaf7;
+}
+
+.zone-hotspots {
+  display: none;
+}
+
+.quiz-map-shell {
+  margin-top: -8px;
+}
+
+.quiz-map-instruction {
+  margin: 0 0 9px;
+  color: var(--muted);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.quiz-map-frame {
+  padding: 6px;
+  border: 1px solid var(--line-dark);
+  background: #f0ece4;
+}
+
+.quiz-store-plan {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fbfaf7;
+}
+
+.quiz-store-plan .zone-hotspots {
+  display: block;
+}
+
+.quiz-store-plan .zone-hit {
+  fill: rgba(178, 153, 116, 0.1);
+  stroke: rgba(105, 91, 70, 0.68);
+  stroke-dasharray: 4 3;
+  stroke-width: 1.4;
+  cursor: pointer;
+  pointer-events: all;
+  transition: fill 140ms, stroke 140ms, stroke-width 140ms;
+}
+
+.quiz-store-plan .zone-hit:hover,
+.quiz-store-plan .zone-hit:focus {
+  fill: rgba(178, 153, 116, 0.24);
+  stroke: var(--ink);
+  stroke-width: 2.2;
+  outline: none;
+}
+
+.quiz-store-plan .zone-hit.selected {
+  fill: rgba(178, 153, 116, 0.34);
+  stroke: var(--ink);
+  stroke-dasharray: none;
+  stroke-width: 2.5;
+}
+
+.quiz-store-plan .zone-hit.correct-answer {
+  fill: rgba(105, 143, 119, 0.4);
+  stroke: var(--green);
+  stroke-dasharray: none;
+  stroke-width: 3;
+}
+
+.quiz-store-plan .zone-hit.wrong-answer {
+  fill: rgba(173, 96, 80, 0.38);
+  stroke: var(--red);
+  stroke-dasharray: none;
+  stroke-width: 3;
+}
+
+.quiz-store-plan.locked .zone-hit {
+  cursor: default;
+  pointer-events: none;
+}
+
+.question-card.map-question .question-text {
+  min-height: 0;
+  margin-bottom: 18px;
 }
 
 .store-map figcaption {

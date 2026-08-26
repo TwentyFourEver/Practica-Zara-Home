@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#f6f3ed" />
     <meta name="description" content="Práctica móvil de tallas y medidas para ropa de cama y cojines." />
     <title>Casa — Tallas y medidas</title>
-    <link rel="stylesheet" href="styles.css?v=14" />
+    <link rel="stylesheet" href="styles.css?v=15" />
   </head>
   <body>
     <div class="app-shell">
@@ -482,7 +482,7 @@
               <span class="section-count">7 zonas</span>
             </div>
             <figure class="store-map">
-              <svg class="store-plan" viewBox="0 0 360 520" role="img" aria-labelledby="storePlanTitle storePlanDesc">
+              <svg class="store-plan" id="storePlan" viewBox="0 0 360 520" role="img" aria-labelledby="storePlanTitle storePlanDesc">
                 <title id="storePlanTitle">Croquis exacto de Zara Home</title>
                 <desc id="storePlanDesc">Plano de las siete zonas con paredes numeradas del 1 al 22, mesas, caja, cosmética, tiradores, alfombra, escaparate y mesa principal.</desc>
 
@@ -531,7 +531,7 @@
                   <rect x="47" y="223" width="48" height="48" /><text x="71" y="249">MESA 1</text>
                   <rect x="286" y="233" width="37" height="37" /><text x="304" y="254">MESA 1</text>
                   <rect x="50" y="354" width="45" height="45" /><text x="72" y="379">MESA 2</text>
-                  <rect x="50" y="420" width="45" height="45" /><text x="72" y="445">MESA 3</text>
+                  <rect x="50" y="420" width="45" height="45" /><text x="72" y="445">MESA 1</text>
                   <rect x="266" y="355" width="34" height="43" /><text x="283" y="379">MESA 1</text>
                   <rect x="304" y="355" width="34" height="43" /><text x="321" y="379">MESA 2</text>
                   <rect x="153" y="333" width="76" height="9" /><rect x="153" y="352" width="76" height="9" />
@@ -541,10 +541,10 @@
 
                 <g class="zone-labels">
                   <text x="112" y="137">ZONA 3</text><text x="112" y="148" class="zone-name">BAÑO</text>
-                  <text x="292" y="142">ZONA 4</text><text x="292" y="153" class="zone-name">KIDS</text>
+                  <text x="263" y="142">ZONA 4</text><text x="263" y="153" class="zone-name">KIDS</text>
                   <text x="111" y="255">ZONA 2</text><text x="111" y="266" class="zone-name">SALÓN</text>
-                  <text x="283" y="280">ZONA 5</text><text x="283" y="291" class="zone-name">DORMITORIO</text>
-                  <text x="95" y="403">ZONA 1</text><text x="95" y="414" class="zone-name">COCINA</text>
+                  <text x="304" y="286">ZONA 5</text><text x="304" y="297" class="zone-name">DORMITORIO</text>
+                  <text x="113" y="403">ZONA 1</text><text x="113" y="414" class="zone-name">COCINA</text>
                   <text x="247" y="410">ZONA 6</text><text x="247" y="421" class="zone-name">DORMITORIO</text>
                   <text x="195" y="306">ZONA 7 · EXPO CAJA</text>
                 </g>
@@ -554,8 +554,18 @@
                   <text x="252" y="211">ALFOMBRA</text><text x="195" y="261" class="cash-label">CAJA</text>
                   <text x="247" y="323">ESPEJO</text><text x="277" y="499">ENTRADA</text>
                 </g>
+
+                <g class="zone-hotspots" aria-hidden="true">
+                  <path class="zone-hit" data-zone="1" d="M29 334H145V478H29Z" />
+                  <path class="zone-hit" data-zone="2" d="M29 189H115V316H29Z" />
+                  <path class="zone-hit" data-zone="3" d="M29 59H142V171H29Z" />
+                  <path class="zone-hit" data-zone="4" d="M278 59H331V171H278Z" />
+                  <path class="zone-hit" data-zone="5" d="M278 189H331V316H278Z" />
+                  <path class="zone-hit" data-zone="6" d="M233 334H331V436H233Z" />
+                  <path class="zone-hit" data-zone="7" d="M116 221H274V326H116Z" />
+                </g>
               </svg>
-              <figcaption>Plano trazado a partir del croquis original · paredes 1–22</figcaption>
+              <figcaption>Distribución fiel al croquis original · paredes 1–22</figcaption>
             </figure>
             <p class="reference-note">Zonas según el croquis: 1 Cocina, 2 Salón, 3 Baño, 4 Kids, 5 y 6 Dormitorio, 7 Expo caja.</p>
             <details class="recall-card"><summary><span>REPASO</span> Di las zonas 1 a 7 en orden.</summary><p>Cocina, Salón, Baño, Kids, Dormitorio, Dormitorio y Expo caja.</p></details>
@@ -578,6 +588,9 @@
             </button>
             <button class="quiz-mode-button" type="button" data-quiz-mode="store" aria-pressed="false">
               <span>02</span><strong>Tienda</strong><small>Manual, códigos y croquis</small>
+            </button>
+            <button class="quiz-mode-button" type="button" data-quiz-mode="map" aria-pressed="false">
+              <span>03</span><strong>Croquis</strong><small>Toca la zona en el mapa</small>
             </button>
           </div>
 
@@ -629,7 +642,7 @@
         <div id="successSoundPlayer"></div>
       </div>
     </div>
-    <script src="app.js?v=17"></script>
+    <script src="app.js?v=18"></script>
     <script src="https://www.youtube.com/iframe_api" async></script>
   </body>
 </html>

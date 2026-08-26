@@ -160,6 +160,16 @@ const storeQuestions = [
   }
 ];
 
+const mapZones = [
+  { id: "1", name: "Cocina" },
+  { id: "2", name: "Salón" },
+  { id: "3", name: "Baño" },
+  { id: "4", name: "Kids" },
+  { id: "5", name: "Dormitorio" },
+  { id: "6", name: "Dormitorio" },
+  { id: "7", name: "Expo caja" }
+];
+
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
@@ -273,10 +283,11 @@ function loadQuizState() {
   const emptyStats = () => ({ correct: 0, wrong: 0, streak: 0, answered: 0 });
   try {
     const stored = JSON.parse(localStorage.getItem("casaQuizState"));
-    if (stored?.measurements || stored?.store) {
+    if (stored?.measurements || stored?.store || stored?.map) {
       return {
         measurements: { ...emptyStats(), ...stored.measurements },
-        store: { ...emptyStats(), ...stored.store }
+        store: { ...emptyStats(), ...stored.store },
+        map: { ...emptyStats(), ...stored.map }
       };
     }
     return {
@@ -286,10 +297,11 @@ function loadQuizState() {
         streak: Number(stored?.streak) || 0,
         answered: Number(stored?.answered) || 0
       },
-      store: emptyStats()
+      store: emptyStats(),
+      map: emptyStats()
     };
   } catch {
-    return { measurements: emptyStats(), store: emptyStats() };
+    return { measurements: emptyStats(), store: emptyStats(), map: emptyStats() };
   }
 }
 
@@ -313,10 +325,14 @@ function loadQuizHistory() {
       store: {
         used: Array.isArray(stored?.store?.used) ? stored.store.used : [],
         last: stored?.store?.last || null
+      },
+      map: {
+        used: Array.isArray(stored?.map?.used) ? stored.map.used : [],
+        last: stored?.map?.last || null
       }
     };
   } catch {
-    return { measurements: emptyHistory(), store: emptyHistory() };
+    return { measurements: emptyHistory(), store: emptyHistory(), map: emptyHistory() };
   }
 }
 
@@ -650,6 +666,16 @@ function makeStoreQuestion(item) {
   };
 }
 
+function makeMapQuestion(zone) {
+  return {
+    category: "CROQUIS",
+    question: `¿Dónde está la <strong>Zona ${zone.id}</strong>?`,
+    answer: zone.id,
+    answerKind: "map",
+    explanation: `La Zona ${zone.id} corresponde a ${zone.name}.`
+  };
+}
+
 function measurementQuestionBank() {
   const beddingQuestions = Object.keys(beddingData).flatMap((size) => products.flatMap((product) => [true, false].map((askMeasure) => ({
     id: `bedding:${size}:${product.id}:${askMeasure ? "measure" : "code"}`,
@@ -669,28 +695,78 @@ function storeQuestionBank() {
   }));
 }
 
+function mapQuestionBank() {
+  return mapZones.map((zone) => ({
+    id: `map:${zone.id}`,
+    create: () => makeMapQuestion(zone)
+  }));
+}
+
+function setupQuizMap() {
+  const sourceMap = $("#storePlan");
+  const frame = $("#quizMapFrame");
+  if (!sourceMap || !frame) return;
+
+  const quizMap = sourceMap.cloneNode(true);
+  quizMap.removeAttribute("id");
+  quizMap.removeAttribute("aria-labelledby");
+  quizMap.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
+  quizMap.classList.add("quiz-store-plan");
+  quizMap.setAttribute("role", "group");
+  quizMap.setAttribute("aria-label", "Croquis interactivo de las zonas de la tienda");
+  const hotspotGroup = quizMap.querySelector(".zone-hotspots");
+  hotspotGroup?.removeAttribute("aria-hidden");
+
+  quizMap.querySelectorAll(".zone-hit").forEach((hotspot) => {
+    const zone = hotspot.dataset.zone;
+    hotspot.setAttribute("role", "button");
+    hotspot.setAttribute("tabindex", "0");
+    hotspot.setAttribute("aria-label", `Seleccionar Zona ${zone}`);
+    const selectZone = () => {
+      if (quizLocked) return;
+      currentQuestion.selectedMapZone = zone;
+      quizMap.querySelectorAll(".zone-hit").forEach((item) => item.classList.remove("selected"));
+      hotspot.classList.add("selected");
+      $("#quizAnswerFields").classList.remove("correct", "wrong");
+    };
+    hotspot.addEventListener("click", selectZone);
+    hotspot.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        selectZone();
+      }
+    });
+  });
+
+  frame.append(quizMap);
+}
+
 function createQuestion() {
   quizLocked = false;
   currentQuestion = quizMode === "store"
     ? takeUnseenQuestion("store", storeQuestionBank())
-    : takeUnseenQuestion("measurements", measurementQuestionBank());
+    : quizMode === "map"
+      ? takeUnseenQuestion("map", mapQuestionBank())
+      : takeUnseenQuestion("measurements", measurementQuestionBank());
   const visibleNumber = activeQuizStats().answered + 1;
   $("#questionCategory").textContent = currentQuestion.category;
   $("#questionNumber").textContent = String(((visibleNumber - 1) % 99) + 1).padStart(2, "0");
   $("#questionText").innerHTML = currentQuestion.question;
-  $("#quizAnswerFields").innerHTML = currentQuestion.answerKind === "choice"
-    ? `<fieldset class="quiz-options"><legend>ELIGE UNA RESPUESTA</legend>
+  $("#quizAnswerFields").innerHTML = currentQuestion.answerKind === "map"
+    ? `<div class="quiz-map-shell"><p class="quiz-map-instruction">Toca la zona correcta</p><div class="quiz-map-frame" id="quizMapFrame"></div></div>`
+    : currentQuestion.answerKind === "choice"
+      ? `<fieldset class="quiz-options"><legend>ELIGE UNA RESPUESTA</legend>
       ${currentQuestion.choices.map((choice) => `<label><input class="quiz-choice" type="radio" name="quiz-choice" value="${choice}" /><span>${choice}</span></label>`).join("")}
       </fieldset>`
-    : currentQuestion.answerKind === "measure"
-      ? `<label class="quiz-answer-label">ESCRIBE LA MEDIDA <span>CM</span></label>
-      <div class="quiz-input-pair" role="group" aria-label="Escribe la medida">
-        <input class="quiz-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" aria-label="Primer número de la medida" />
-        <span aria-hidden="true">×</span>
-        <input class="quiz-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" aria-label="Segundo número de la medida" />
-      </div>`
-      : `<label class="quiz-answer-label" for="quizCodeInput">ESCRIBE LA TALLA</label>
-        <input class="quiz-input quiz-code-input" id="quizCodeInput" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" aria-label="Escribe la talla" />`;
+      : currentQuestion.answerKind === "measure"
+        ? `<label class="quiz-answer-label">ESCRIBE LA MEDIDA <span>CM</span></label>
+        <div class="quiz-input-pair" role="group" aria-label="Escribe la medida">
+          <input class="quiz-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" aria-label="Primer número de la medida" />
+          <span aria-hidden="true">×</span>
+          <input class="quiz-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" aria-label="Segundo número de la medida" />
+        </div>`
+        : `<label class="quiz-answer-label" for="quizCodeInput">ESCRIBE LA TALLA</label>
+          <input class="quiz-input quiz-code-input" id="quizCodeInput" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" aria-label="Escribe la talla" />`;
   $$("#quizAnswerFields .quiz-input").forEach((input) => input.addEventListener("input", () => {
     input.value = input.value.replace(/\D/g, "");
     $("#quizAnswerFields").classList.remove("correct", "wrong");
@@ -699,6 +775,7 @@ function createQuestion() {
     $("#quizAnswerFields").classList.remove("correct", "wrong");
     $$("#quizAnswerFields .quiz-options label").forEach((label) => label.classList.remove("correct-answer", "wrong-answer"));
   }));
+  if (currentQuestion.answerKind === "map") setupQuizMap();
   $("#quizAnswerForm").classList.remove("hidden");
   $(".quiz-check-button").classList.remove("hidden");
   $("#answerNote").className = "answer-note hidden";
@@ -706,6 +783,7 @@ function createQuestion() {
   $("#nextQuestionButton").classList.add("hidden");
   updateStats();
   const card = $("#questionCard");
+  card.classList.toggle("map-question", currentQuestion.answerKind === "map");
   card.classList.remove("swap");
   void card.offsetWidth;
   card.classList.add("swap");
@@ -716,21 +794,27 @@ function submitQuizAnswer(event) {
   if (quizLocked) return;
   const inputs = $$("#quizAnswerFields .quiz-input");
   const selectedChoice = $("#quizAnswerFields .quiz-choice:checked");
+  if (currentQuestion.answerKind === "map" && !currentQuestion.selectedMapZone) {
+    showToast("Toca una zona del mapa antes de comprobar.");
+    return;
+  }
   if (currentQuestion.answerKind === "choice" && !selectedChoice) {
     showToast("Elige una respuesta antes de comprobar.");
     return;
   }
-  if (currentQuestion.answerKind !== "choice" && inputs.some((input) => !input.value.trim())) {
+  if (!["choice", "map"].includes(currentQuestion.answerKind) && inputs.some((input) => !input.value.trim())) {
     showToast("Escribe la respuesta completa antes de comprobar.");
     inputs.find((input) => !input.value.trim())?.focus();
     return;
   }
 
-  const response = currentQuestion.answerKind === "choice"
-    ? selectedChoice.value
-    : currentQuestion.answerKind === "measure"
-      ? inputs.map((input) => input.value.trim()).join("x")
-      : inputs[0].value.trim();
+  const response = currentQuestion.answerKind === "map"
+    ? currentQuestion.selectedMapZone
+    : currentQuestion.answerKind === "choice"
+      ? selectedChoice.value
+      : currentQuestion.answerKind === "measure"
+        ? inputs.map((input) => input.value.trim()).join("x")
+        : inputs[0].value.trim();
   const normalize = currentQuestion.answerKind === "measure" ? normalizeMeasure : normalizeCode;
   quizLocked = true;
   const isCorrect = normalize(response) === normalize(currentQuestion.answer);
@@ -746,6 +830,15 @@ function submitQuizAnswer(event) {
     if (input.value === currentQuestion.answer) label.classList.add("correct-answer");
     else if (input.checked) label.classList.add("wrong-answer");
   });
+  const quizMap = $("#quizAnswerFields .quiz-store-plan");
+  if (quizMap) {
+    quizMap.classList.add("locked");
+    quizMap.querySelectorAll(".zone-hit").forEach((hotspot) => {
+      hotspot.removeAttribute("tabindex");
+      if (hotspot.dataset.zone === currentQuestion.answer) hotspot.classList.add("correct-answer");
+      else if (hotspot.dataset.zone === currentQuestion.selectedMapZone) hotspot.classList.add("wrong-answer");
+    });
+  }
   $(".quiz-check-button").classList.add("hidden");
 
   const stats = activeQuizStats();
@@ -809,11 +902,13 @@ function resetProgress() {
   updateFillProgress("cushions");
   quizState = {
     measurements: { correct: 0, wrong: 0, streak: 0, answered: 0 },
-    store: { correct: 0, wrong: 0, streak: 0, answered: 0 }
+    store: { correct: 0, wrong: 0, streak: 0, answered: 0 },
+    map: { correct: 0, wrong: 0, streak: 0, answered: 0 }
   };
   quizHistory = {
     measurements: { used: [], last: null },
-    store: { used: [], last: null }
+    store: { used: [], last: null },
+    map: { used: [], last: null }
   };
   saveQuizState();
   saveQuizHistory();
