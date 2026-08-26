@@ -43,6 +43,93 @@ const products = [
   { id: "comforter", name: "Edredón", short: "Edredón", icon: "▦" }
 ];
 
+const storeQuestions = [
+  {
+    question: "¿Dónde se encuentra propiamente el <strong>RFID</strong>?",
+    answer: "En la alarma",
+    choices: ["En la alarma", "En el precio", "En la bolsa"],
+    explanation: "El RFID se encuentra en la alarma y permite llevar un inventario más exacto."
+  },
+  {
+    question: "¿Qué herramienta indica cuánto está generando cada <strong>zona</strong>?",
+    answer: "Money mapping",
+    choices: ["Money mapping", "Stock", "Merchan"],
+    explanation: "Money mapping muestra cuánto está generando cada zona."
+  },
+  {
+    question: "¿Para qué se utiliza <strong>.25</strong>?",
+    answer: "Reponer producto a tienda",
+    choices: ["Reponer producto a tienda", "Cambiar precios", "Registrar taras"],
+    explanation: ".25 se usa para reponer producto a tienda."
+  },
+  {
+    question: "En MO/CA/CO/TA, ¿qué significa <strong>CA</strong>?",
+    answer: "Calidad",
+    choices: ["Calidad", "Cantidad", "Categoría"],
+    explanation: "MO/CA/CO/TA significa Modelo / Calidad / Color / Talla."
+  },
+  {
+    question: "¿Qué son las <strong>taras</strong>?",
+    answer: "Productos dañados",
+    choices: ["Productos dañados", "Productos agotados", "Productos de exposición"],
+    explanation: "Las taras son productos que se encuentran dañados."
+  },
+  {
+    question: "¿Cuál es un mínimo de <strong>atención al cliente</strong>?",
+    answer: "Ofrecer alternativas",
+    choices: ["Ofrecer alternativas", "Evitar explicar políticas", "Embolsar todo igual"],
+    explanation: "Entre los mínimos están mirada amable, saludo, venta mano a mano, embolsar según producto, indicar políticas y ofrecer alternativas."
+  },
+  {
+    question: "¿Qué gramaje tiene la fibra de <strong>verano</strong>?",
+    answer: "125 g/m²",
+    choices: ["125 g/m²", "170 g/m²", "350 g/m²"],
+    explanation: "El relleno nórdico de microfibra de verano pesa 125 g/m² y ofrece calor bajo."
+  },
+  {
+    question: "¿Qué valor TOG tiene el nórdico de <strong>microfibra de 350 g/m²</strong>?",
+    answer: "9.5",
+    choices: ["9.5", "3.5", "12.5"],
+    explanation: "La microfibra de 350 g/m² tiene TOG 9.5."
+  },
+  {
+    question: "¿Qué significa un valor <strong>TOG más alto</strong>?",
+    answer: "Un nórdico más caliente",
+    choices: ["Un nórdico más caliente", "Un nórdico más ligero", "Una talla más grande"],
+    explanation: "Cuanto más elevado es el TOG, mayor es la capacidad térmica y más caliente es el nórdico."
+  },
+  {
+    question: "¿Cuál es la composición del relleno de <strong>plumón</strong>?",
+    answer: "90% plumón y 10% plumita",
+    choices: ["90% plumón y 10% plumita", "90% pluma y 10% plumón", "100% fibra"],
+    explanation: "El plumón lleva 90% plumón de pato y 10% plumita; pesa 170 g/m²."
+  },
+  {
+    question: "El <strong>tacto pluma</strong> parece pluma, pero ¿de qué está hecho?",
+    answer: "Fibra o material sintético",
+    choices: ["Fibra o material sintético", "Algodón", "Plumón de pato"],
+    explanation: "Tacto pluma simula la pluma, pero está hecho de fibra o material sintético."
+  },
+  {
+    question: "¿Qué zonas corresponden a <strong>Dormitorio</strong>?",
+    answer: "Zonas 5 y 6",
+    choices: ["Zonas 5 y 6", "Zonas 3 y 4", "Zonas 1 y 2"],
+    explanation: "En el croquis, Dormitorio ocupa las zonas 5 y 6."
+  },
+  {
+    question: "¿Qué sección está en la <strong>Zona 7</strong>?",
+    answer: "Expo caja",
+    choices: ["Expo caja", "Baño", "Cocina"],
+    explanation: "La Zona 7 corresponde a Expo caja, con la caja en el centro."
+  },
+  {
+    question: "¿Cuántas partes se estudian en la <strong>etiqueta externa</strong>?",
+    answer: "6",
+    choices: ["6", "4", "8"],
+    explanation: "Son seis: ambiente, RFID, referencia, medidas, descripción y precio."
+  }
+];
+
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
@@ -183,6 +270,10 @@ function normalizeCode(value) {
 
 function sample(items) {
   return items[Math.floor(Math.random() * items.length)];
+}
+
+function shuffled(items) {
+  return [...items].sort(() => Math.random() - 0.5);
 }
 
 function showToast(message) {
@@ -424,25 +515,50 @@ function makeCushionQuestion() {
   };
 }
 
+function makeStoreQuestion() {
+  const item = sample(storeQuestions);
+  return {
+    category: "MANUAL DE TIENDA",
+    question: item.question,
+    answer: item.answer,
+    answerKind: "choice",
+    choices: shuffled(item.choices),
+    explanation: item.explanation
+  };
+}
+
 function createQuestion() {
   quizLocked = false;
-  currentQuestion = Math.random() < 0.78 ? makeBeddingQuestion() : makeCushionQuestion();
+  const questionType = Math.random();
+  currentQuestion = questionType < 0.55
+    ? makeBeddingQuestion()
+    : questionType < 0.7
+      ? makeCushionQuestion()
+      : makeStoreQuestion();
   const visibleNumber = quizState.answered + 1;
   $("#questionCategory").textContent = currentQuestion.category;
   $("#questionNumber").textContent = String(((visibleNumber - 1) % 99) + 1).padStart(2, "0");
   $("#questionText").innerHTML = currentQuestion.question;
-  $("#quizAnswerFields").innerHTML = currentQuestion.answerKind === "measure"
-    ? `<label class="quiz-answer-label">ESCRIBE LA MEDIDA <span>CM</span></label>
+  $("#quizAnswerFields").innerHTML = currentQuestion.answerKind === "choice"
+    ? `<fieldset class="quiz-options"><legend>ELIGE UNA RESPUESTA</legend>
+      ${currentQuestion.choices.map((choice) => `<label><input class="quiz-choice" type="radio" name="quiz-choice" value="${choice}" /><span>${choice}</span></label>`).join("")}
+      </fieldset>`
+    : currentQuestion.answerKind === "measure"
+      ? `<label class="quiz-answer-label">ESCRIBE LA MEDIDA <span>CM</span></label>
       <div class="quiz-input-pair" role="group" aria-label="Escribe la medida">
         <input class="quiz-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" aria-label="Primer número de la medida" />
         <span aria-hidden="true">×</span>
         <input class="quiz-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" aria-label="Segundo número de la medida" />
       </div>`
-    : `<label class="quiz-answer-label" for="quizCodeInput">ESCRIBE LA TALLA</label>
-      <input class="quiz-input quiz-code-input" id="quizCodeInput" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" aria-label="Escribe la talla" />`;
+      : `<label class="quiz-answer-label" for="quizCodeInput">ESCRIBE LA TALLA</label>
+        <input class="quiz-input quiz-code-input" id="quizCodeInput" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" aria-label="Escribe la talla" />`;
   $$("#quizAnswerFields .quiz-input").forEach((input) => input.addEventListener("input", () => {
     input.value = input.value.replace(/\D/g, "");
     $("#quizAnswerFields").classList.remove("correct", "wrong");
+  }));
+  $$("#quizAnswerFields .quiz-choice").forEach((input) => input.addEventListener("change", () => {
+    $("#quizAnswerFields").classList.remove("correct", "wrong");
+    $$("#quizAnswerFields .quiz-options label").forEach((label) => label.classList.remove("correct-answer", "wrong-answer"));
   }));
   $("#quizAnswerForm").classList.remove("hidden");
   $(".quiz-check-button").classList.remove("hidden");
@@ -460,15 +576,22 @@ function submitQuizAnswer(event) {
   event.preventDefault();
   if (quizLocked) return;
   const inputs = $$("#quizAnswerFields .quiz-input");
-  if (inputs.some((input) => !input.value.trim())) {
+  const selectedChoice = $("#quizAnswerFields .quiz-choice:checked");
+  if (currentQuestion.answerKind === "choice" && !selectedChoice) {
+    showToast("Elige una respuesta antes de comprobar.");
+    return;
+  }
+  if (currentQuestion.answerKind !== "choice" && inputs.some((input) => !input.value.trim())) {
     showToast("Escribe la respuesta completa antes de comprobar.");
     inputs.find((input) => !input.value.trim())?.focus();
     return;
   }
 
-  const response = currentQuestion.answerKind === "measure"
-    ? inputs.map((input) => input.value.trim()).join("x")
-    : inputs[0].value.trim();
+  const response = currentQuestion.answerKind === "choice"
+    ? selectedChoice.value
+    : currentQuestion.answerKind === "measure"
+      ? inputs.map((input) => input.value.trim()).join("x")
+      : inputs[0].value.trim();
   const normalize = currentQuestion.answerKind === "measure" ? normalizeMeasure : normalizeCode;
   quizLocked = true;
   const isCorrect = normalize(response) === normalize(currentQuestion.answer);
@@ -477,6 +600,12 @@ function submitQuizAnswer(event) {
   inputs.forEach((input) => {
     input.disabled = true;
     if (!isCorrect) input.setAttribute("aria-invalid", "true");
+  });
+  $$("#quizAnswerFields .quiz-choice").forEach((input) => {
+    input.disabled = true;
+    const label = input.closest("label");
+    if (input.value === currentQuestion.answer) label.classList.add("correct-answer");
+    else if (input.checked) label.classList.add("wrong-answer");
   });
   $(".quiz-check-button").classList.add("hidden");
 

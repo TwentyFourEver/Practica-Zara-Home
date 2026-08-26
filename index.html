@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#f6f3ed" />
     <meta name="description" content="Práctica móvil de tallas y medidas para ropa de cama y cojines." />
     <title>Casa — Tallas y medidas</title>
-    <link rel="stylesheet" href="styles.css?v=8" />
+    <link rel="stylesheet" href="styles.css?v=10" />
   </head>
   <body>
     <div class="app-shell">
@@ -297,6 +297,150 @@
           </aside>
         </section>
 
+        <section class="view" id="storeView" aria-labelledby="storeTitle">
+          <div class="learn-header reveal">
+            <p class="eyebrow">MANUAL DE TIENDA</p>
+            <h1 id="storeTitle">Aprende lo esencial<br />de Zara Home.</h1>
+            <p>Estudia un bloque a la vez. Intenta responder la pregunta de memoria antes de abrir cada tarjeta.</p>
+          </div>
+
+          <nav class="topic-jump reveal delay-1" aria-label="Temas del manual">
+            <a href="#store-basics">Tienda</a>
+            <a href="#store-tech">Tecnología</a>
+            <a href="#store-service">Atención</a>
+            <a href="#store-fillings">Rellenos</a>
+            <a href="#store-map">Croquis</a>
+          </nav>
+
+          <section class="manual-section reveal delay-2" id="store-basics" aria-labelledby="basicsTitle">
+            <div class="section-heading">
+              <div><span>01 · IDENTIFICACIÓN</span><h2 id="basicsTitle">Tienda y etiquetas</h2></div>
+              <span class="section-count">6 claves</span>
+            </div>
+
+            <h3 class="manual-subtitle">Símbolos de las secciones</h3>
+            <div class="symbol-grid" aria-label="Símbolos de las secciones de tienda">
+              <article><b>■</b><span>Dormitorio<small>Bedroom</small></span></article>
+              <article><b>●</b><span>Cocina<small>Kitchen</small></span></article>
+              <article><b>▼</b><span>Baño<small>Bathroom</small></span></article>
+              <article><b>⬟</b><span>Salón<small>Living room</small></span></article>
+              <article><b>★</b><span>Kids</span></article>
+              <article><b>◆</b><span>Cosmética<small>Cosmetics</small></span></article>
+            </div>
+
+            <div class="fact-pair">
+              <article><span>TIPOS DE ALARMA</span><ul><li>Etiqueta externa</li><li>Alarma dura (galleta)</li><li>Etiqueta interna</li></ul></article>
+              <article><span>ETIQUETA EXTERNA</span><ol><li>Símbolo de ambiente</li><li>Símbolo RFID</li><li>Referencia</li><li>Medidas</li><li>Descripción</li><li>Precio</li></ol></article>
+            </div>
+
+            <details class="recall-card">
+              <summary><span>REPASO</span> ¿Cuáles son las seis partes de una etiqueta externa?</summary>
+              <p>Símbolo de ambiente, símbolo RFID, referencia, medidas, descripción y precio.</p>
+            </details>
+          </section>
+
+          <section class="manual-section reveal delay-2" id="store-tech" aria-labelledby="techTitle">
+            <div class="section-heading">
+              <div><span>02 · OPERACIÓN</span><h2 id="techTitle">RFID, tecnología y referencia</h2></div>
+              <span class="section-count">MO · CA · CO · TA</span>
+            </div>
+
+            <div class="rfid-callout">
+              <strong>RFID</strong>
+              <p>Se encuentra dentro de la alarma y permite llevar un inventario más exacto. Para verificar si un producto tiene RFID o información se usan <b>iPod, PDA, iPad y TGT</b>.</p>
+            </div>
+
+            <h3 class="manual-subtitle">Herramientas y funciones</h3>
+            <dl class="ops-list">
+              <div><dt>Stock</dt><dd>Visualiza el producto disponible en piso y almacén: cantidades, exposiciones y bloqueos.</dd></div>
+              <div><dt>OneStore</dt><dd>Muestra ventas y cantidad total de productos en piso y almacén.</dd></div>
+              <div><dt>.25</dt><dd>Se utiliza para reponer producto a tienda.</dd></div>
+              <div><dt>Merchan</dt><dd>Ayuda con la coordinación de la tienda.</dd></div>
+            </dl>
+
+            <h3 class="manual-subtitle">En la PDA</h3>
+            <ol class="number-notes">
+              <li><b>Stock:</b> consulta existencias.</li>
+              <li><b>Money mapping:</b> indica cuánto está generando cada zona.</li>
+              <li><b>.25:</b> repone producto a tienda.</li>
+              <li><b>.25R:</b> muestra detalle de la alarma (RFID o Info), busca producto y registra movimiento a tienda o almacén. También sirve para hacer barridos de piso y almacén.</li>
+            </ol>
+
+            <div class="reference-code" aria-label="Partes de una referencia">
+              <div><strong>MO</strong><span>Modelo</span><small>varía</small></div>
+              <i>/</i><div><strong>CA</strong><span>Calidad</span><small>se mantiene</small></div>
+              <i>/</i><div><strong>CO</strong><span>Color</span><small>parámetros</small></div>
+              <i>/</i><div><strong>TA</strong><span>Talla</span><small>establecida</small></div>
+            </div>
+            <p class="reference-note">La calidad se mantiene y ayuda a identificar la familia del artículo: vaso, sábana, toalla, etc. El modelo cambia; el color usa parámetros y las tallas ya están establecidas.</p>
+
+            <details class="recall-card">
+              <summary><span>REPASO</span> ¿Qué significa MO/CA/CO/TA?</summary>
+              <p>Modelo / Calidad / Color / Talla.</p>
+            </details>
+          </section>
+
+          <section class="manual-section reveal delay-2" id="store-service" aria-labelledby="serviceTitle">
+            <div class="section-heading">
+              <div><span>03 · CLIENTE</span><h2 id="serviceTitle">Atención y taras</h2></div>
+              <span class="section-count">6 mínimos</span>
+            </div>
+            <div class="definition-card"><span>TARAS</span><p>Son productos que se encuentran dañados.</p></div>
+            <ol class="service-steps">
+              <li><span>01</span>Mirada amable</li><li><span>02</span>Saludo</li><li><span>03</span>Venta mano a mano</li>
+              <li><span>04</span>Embolsar según producto</li><li><span>05</span>Indicar políticas</li><li><span>06</span>Ofrecer alternativas</li>
+            </ol>
+            <p class="memory-phrase"><strong>Frase guía:</strong> “Miro, saludo, acompaño; embolso, explico y doy alternativas”.</p>
+            <details class="recall-card"><summary><span>REPASO</span> ¿Qué es una tara?</summary><p>Un producto que se encuentra dañado.</p></details>
+          </section>
+
+          <section class="manual-section reveal delay-2" id="store-fillings" aria-labelledby="fillingsTitle">
+            <div class="section-heading">
+              <div><span>04 · PRODUCTO</span><h2 id="fillingsTitle">Rellenos y tactos</h2></div>
+              <span class="section-count">Guía rápida</span>
+            </div>
+            <div class="fillings-grid">
+              <article><span>DUVET / NÓRDICO</span><ul><li>Fibra de verano: 125 g/m², sintético</li><li>Fibra: 350 g/m²</li><li>Pluma</li></ul></article>
+              <article><span>ALMOHADA</span><ul><li>Fibra</li><li>Pluma</li><li>Viscoelástica (solo 50 × 75)</li><li>Viscocops (solo 50 × 75)</li><li>Tacto pluma</li></ul></article>
+              <article><span>COJÍN</span><ul><li>Fibra</li><li>Pluma</li></ul></article>
+              <article class="accent-fill"><span>TACTO PLUMA</span><p>Simula que es pluma, pero está hecho de fibra o material sintético. También existe tacto pluma de fibra de verano.</p></article>
+            </div>
+
+            <h3 class="manual-subtitle">Comparador de rellenos nórdicos</h3>
+            <div class="duvet-cards">
+              <details open><summary><strong>Microfibra de verano</strong><small>0113/010/250 · 125 g/m²</small></summary><div><p>100% fibra hueca siliconada; funda exterior 100% microfibra de poliéster, muy suave. Muy ligero y de calor bajo para noches cálidas.</p><ul><li>Hipoalergénico, pero no antiácaros.</li><li>Cosido directo para evitar que se apelmace.</li><li>Lavadora máx. 40 °C.</li><li>Sin secadora, lejía/blanqueador ni plancha.</li></ul></div></details>
+              <details><summary><strong>Microfibra</strong><small>0110/010/250 · 350 g/m² · TOG 9.5</small></summary><div><p>100% fibra hueca siliconada con funda de microfibra de poliéster. Calor medio, excelente comodidad y tacto melocotón.</p><ul><li>Hipoalergénico, pero no antiácaros.</li><li>Cosido directo para evitar que se apelmace.</li><li>Lavadora máx. 40 °C.</li><li>Sin secadora, lejía/blanqueador ni plancha.</li></ul></div></details>
+              <details><summary><strong>Pluma / plumón</strong><small>1007/010/250 · 300 g/m²</small></summary><div><p>90% pluma de pato y 10% plumón. Calor medio. Tejido exterior 100% algodón con acabado down-proof.</p><ul><li>Para entretiempo o temperatura media.</li><li>Lavadora máx. 30 °C y centrifugado corto.</li><li>Secadora a temperatura reducida; no blanqueador.</li><li>Plancha máx. 200 °C; limpieza en seco con tetracloroetileno.</li></ul></div></details>
+              <details><summary><strong>Plumón</strong><small>1001/010/250 · 170 g/m²</small></summary><div><p>90% plumón de pato y 10% plumita. Natural, transpirable, de calor medio y gran aislamiento. Exterior de algodón down-proof.</p><ul><li>Plumas procedentes de la cadena alimenticia, nunca de animales vivos.</li><li>Lavadora máx. 30 °C y centrifugado corto.</li><li>Secadora a temperatura reducida; no blanqueador.</li><li>Plancha máx. 200 °C; limpieza en seco con tetracloroetileno.</li></ul></div></details>
+            </div>
+            <div class="tog-note"><strong>TOG</strong><p>Clasifica la capacidad térmica del relleno: cuanto mayor es el TOG, más caliente es el nórdico.</p></div>
+            <details class="recall-card"><summary><span>REPASO</span> ¿Qué diferencia principal hay entre pluma/plumón y plumón?</summary><p>Pluma/plumón lleva 90% pluma + 10% plumón y pesa 300 g/m²; plumón lleva 90% plumón + 10% plumita y pesa 170 g/m².</p></details>
+          </section>
+
+          <section class="manual-section reveal delay-3" id="store-map" aria-labelledby="mapTitle">
+            <div class="section-heading">
+              <div><span>05 · UBICACIÓN</span><h2 id="mapTitle">Croquis de la tienda</h2></div>
+              <span class="section-count">7 zonas</span>
+            </div>
+            <div class="store-map" aria-label="Croquis simplificado de las zonas de la tienda">
+              <article class="zone z3"><span>ZONA 3</span><strong>Baño</strong><small>Mesa 1</small></article>
+              <article class="zone z5"><span>ZONA 5</span><strong>Dormitorio</strong><small>Mesa 2 · Cosmética</small></article>
+              <article class="zone z4"><span>ZONA 4</span><strong>Kids</strong><small>Mesa 1 · Alfombra</small></article>
+              <article class="zone z2"><span>ZONA 2</span><strong>Salón</strong><small>Mesa 1 · Tiradores</small></article>
+              <article class="zone z7"><span>ZONA 7</span><strong>Expo caja</strong><small>Caja central</small></article>
+              <article class="zone z1"><span>ZONA 1</span><strong>Cocina</strong><small>Mesas 1, 2 y 3</small></article>
+              <article class="zone z6"><span>ZONA 6</span><strong>Dormitorio</strong><small>Mesas 1 y 2</small></article>
+              <div class="map-entry">ENTRADA · ESCAPARATE · MESA PRINCIPAL</div>
+            </div>
+            <p class="reference-note">El croquis original numera las paredes del perímetro del 1 al 22. Memoriza primero las zonas: 1 Cocina, 2 Salón, 3 Baño, 4 Kids, 5 y 6 Dormitorio, 7 Expo caja.</p>
+            <details class="recall-card"><summary><span>REPASO</span> Di las zonas 1 a 7 en orden.</summary><p>Cocina, Salón, Baño, Kids, Dormitorio, Dormitorio y Expo caja.</p></details>
+          </section>
+
+          <aside class="study-plan reveal delay-3">
+            <span class="tip-symbol">✦</span><div><strong>Rutina sugerida</strong><p>Estudia una sección, cierra las tarjetas y responde sus repasos. Al día siguiente intenta recordar solo los títulos y las cifras clave.</p></div>
+          </aside>
+        </section>
+
         <section class="view" id="quizView" aria-labelledby="quizTitle">
           <div class="quiz-header reveal">
             <p class="eyebrow">MEMORIA RÁPIDA</p>
@@ -340,6 +484,10 @@
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v16H6.5A2.5 2.5 0 0 0 4 21.5v-16ZM20 5.5A2.5 2.5 0 0 0 17.5 3H13v16h4.5a2.5 2.5 0 0 1 2.5 2.5v-16Z" /></svg>
           <span>Aprender</span>
         </button>
+        <button class="nav-item" type="button" data-view="storeView">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 10h16M5 10v10h14V10M3 10l2-6h14l2 6M9 20v-6h6v6" /></svg>
+          <span>Tienda</span>
+        </button>
         <button class="nav-item" type="button" data-view="quizView">
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 11a3 3 0 1 1 3.7 2.9c-.5.2-.7.6-.7 1.1v.3M12 19h.01M4 12a8 8 0 1 0 16 0 8 8 0 0 0-16 0Z" /></svg>
           <span>Quiz</span>
@@ -351,7 +499,7 @@
         <div id="successSoundPlayer"></div>
       </div>
     </div>
-    <script src="app.js?v=11"></script>
+    <script src="app.js?v=13"></script>
     <script src="https://www.youtube.com/iframe_api" async></script>
   </body>
 </html>
