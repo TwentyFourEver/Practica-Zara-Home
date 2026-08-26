@@ -127,6 +127,36 @@ const storeQuestions = [
     answer: "6",
     choices: ["6", "4", "8"],
     explanation: "Son seis: ambiente, RFID, referencia, medidas, descripción y precio."
+  },
+  {
+    question: "¿Qué código de calidad identifica la <strong>funda nórdica</strong>?",
+    answer: "088",
+    choices: ["088", "089", "093"],
+    explanation: "La funda nórdica utiliza la calidad 088."
+  },
+  {
+    question: "¿Qué código de calidad identifica la <strong>sábana encimera</strong>?",
+    answer: "089",
+    choices: ["089", "090", "091/092"],
+    explanation: "La sábana encimera utiliza la calidad 089."
+  },
+  {
+    question: "¿Qué código de calidad identifica la <strong>sábana bajera</strong>?",
+    answer: "090",
+    choices: ["090", "088", "093"],
+    explanation: "La sábana bajera utiliza la calidad 090."
+  },
+  {
+    question: "En los parámetros de color, ¿qué representa el código <strong>400</strong>?",
+    answer: "Azul",
+    choices: ["Azul", "Verde", "Marrón"],
+    explanation: "La escalera de color usa 300 amarillo, 400 azul y 500 verde."
+  },
+  {
+    question: "En los parámetros de color, ¿qué representa el código <strong>999</strong>?",
+    answer: "Multicolor",
+    choices: ["Multicolor", "Negro y gris", "Blanco"],
+    explanation: "El código 999 corresponde a multicolor."
   }
 ];
 

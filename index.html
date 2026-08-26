@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#f6f3ed" />
     <meta name="description" content="Práctica móvil de tallas y medidas para ropa de cama y cojines." />
     <title>Casa — Tallas y medidas</title>
-    <link rel="stylesheet" href="styles.css?v=10" />
+    <link rel="stylesheet" href="styles.css?v=12" />
   </head>
   <body>
     <div class="app-shell">
@@ -374,9 +374,50 @@
             </div>
             <p class="reference-note">La calidad se mantiene y ayuda a identificar la familia del artículo: vaso, sábana, toalla, etc. El modelo cambia; el color usa parámetros y las tallas ya están establecidas.</p>
 
+            <h3 class="manual-subtitle">Códigos de calidad</h3>
+            <div class="quality-table" role="table" aria-label="Códigos de calidad de textiles">
+              <div role="row"><span role="cell">Manta</span><strong role="cell">004</strong></div>
+              <div role="row"><span role="cell">Edredón</span><strong role="cell">005</strong></div>
+              <div role="row"><span role="cell">Colcha</span><strong role="cell">006</strong></div>
+              <div role="row"><span role="cell">Cojín edredón/colcha</span><strong role="cell">007</strong></div>
+              <div role="row"><span role="cell">Funda cojín decorativo</span><strong role="cell">008</strong></div>
+              <div role="row"><span role="cell">Cojín decorativo</span><strong role="cell">009</strong></div>
+              <div role="row"><span role="cell">Funda nórdica</span><strong role="cell">088</strong></div>
+              <div role="row"><span role="cell">Sábana encimera</span><strong role="cell">089</strong></div>
+              <div role="row"><span role="cell">Sábana bajera</span><strong role="cell">090</strong></div>
+              <div role="row"><span role="cell">Sábana bajera calidad</span><strong role="cell">090/095*</strong></div>
+              <div role="row"><span role="cell">Fundas almohada</span><strong role="cell">091/092</strong></div>
+              <div role="row"><span role="cell">Cubrecanapé</span><strong role="cell">093</strong></div>
+            </div>
+            <p class="memory-phrase"><strong>Patrón:</strong> textiles generales 004–009; ropa de cama 088–093.</p>
+
+            <h3 class="manual-subtitle">Parámetros de color</h3>
+            <div class="color-parameters" aria-label="Parámetros utilizados para los colores">
+              <span><i class="swatch natural"></i><b>050</b> Natural <small>antiguo</small></span>
+              <span><i class="swatch white"></i><b>250/250</b> Blanco</span>
+              <span><i class="swatch off-white"></i><b>50</b> Blanco roto <small>antiguo</small></span>
+              <span><i class="swatch yellow"></i><b>300</b> Amarillo</span>
+              <span><i class="swatch blue"></i><b>400</b> Azul</span>
+              <span><i class="swatch green"></i><b>500</b> Verde</span>
+              <span class="wide"><i class="swatch warm"></i><b>600</b> Rojo, naranja, lila, rosa, morado, etc.</span>
+              <span><i class="swatch brown"></i><b>700</b> Marrón</span>
+              <span><i class="swatch bone"></i><b>70</b> Crudos / hueso</span>
+              <span><i class="swatch black"></i><b>800</b> Negro y gris</span>
+              <span><i class="swatch multi"></i><b>999</b> Multicolor</span>
+            </div>
+            <p class="memory-phrase"><strong>Escalera de color:</strong> 300 amarillo, 400 azul, 500 verde, 600 cálidos, 700 marrón, 800 negro/gris y 999 multicolor.</p>
+
             <details class="recall-card">
               <summary><span>REPASO</span> ¿Qué significa MO/CA/CO/TA?</summary>
               <p>Modelo / Calidad / Color / Talla.</p>
+            </details>
+            <details class="recall-card">
+              <summary><span>REPASO</span> ¿Qué código de calidad identifica la sábana bajera?</summary>
+              <p>090. La variante “sábana bajera calidad” utiliza 090/095*.</p>
+            </details>
+            <details class="recall-card">
+              <summary><span>REPASO</span> ¿Qué colores forman la escalera 300–800?</summary>
+              <p>300 amarillo, 400 azul, 500 verde, 600 colores cálidos, 700 marrón y 800 negro/gris.</p>
             </details>
           </section>
 
@@ -422,17 +463,83 @@
               <div><span>05 · UBICACIÓN</span><h2 id="mapTitle">Croquis de la tienda</h2></div>
               <span class="section-count">7 zonas</span>
             </div>
-            <div class="store-map" aria-label="Croquis simplificado de las zonas de la tienda">
-              <article class="zone z3"><span>ZONA 3</span><strong>Baño</strong><small>Mesa 1</small></article>
-              <article class="zone z5"><span>ZONA 5</span><strong>Dormitorio</strong><small>Mesa 2 · Cosmética</small></article>
-              <article class="zone z4"><span>ZONA 4</span><strong>Kids</strong><small>Mesa 1 · Alfombra</small></article>
-              <article class="zone z2"><span>ZONA 2</span><strong>Salón</strong><small>Mesa 1 · Tiradores</small></article>
-              <article class="zone z7"><span>ZONA 7</span><strong>Expo caja</strong><small>Caja central</small></article>
-              <article class="zone z1"><span>ZONA 1</span><strong>Cocina</strong><small>Mesas 1, 2 y 3</small></article>
-              <article class="zone z6"><span>ZONA 6</span><strong>Dormitorio</strong><small>Mesas 1 y 2</small></article>
-              <div class="map-entry">ENTRADA · ESCAPARATE · MESA PRINCIPAL</div>
-            </div>
-            <p class="reference-note">El croquis original numera las paredes del perímetro del 1 al 22. Memoriza primero las zonas: 1 Cocina, 2 Salón, 3 Baño, 4 Kids, 5 y 6 Dormitorio, 7 Expo caja.</p>
+            <figure class="store-map">
+              <svg class="store-plan" viewBox="0 0 360 520" role="img" aria-labelledby="storePlanTitle storePlanDesc">
+                <title id="storePlanTitle">Croquis exacto de Zara Home</title>
+                <desc id="storePlanDesc">Plano de las siete zonas con paredes numeradas del 1 al 22, mesas, caja, cosmética, tiradores, alfombra, escaparate y mesa principal.</desc>
+
+                <g class="plan-walls">
+                  <path d="M25 55H105" /><path d="M105 55A35 35 0 0 0 140 90" class="door-swing" />
+                  <path d="M25 55V175H105" /><path d="M25 185H105" /><path d="M25 185V320H105" />
+                  <path d="M25 330H105" /><path d="M25 330V485H150" /><path d="M150 485A45 45 0 0 0 195 440" class="door-swing" />
+
+                  <path d="M155 55H275" /><path d="M275 55A35 35 0 0 0 310 90" class="door-swing" />
+                  <path d="M305 55H335V175H275" /><path d="M275 185H335V320H275" />
+                  <path d="M275 330H335V440H230" />
+                  <path d="M220 485V465H335V485" />
+
+                  <path d="M120 225V290H270V225Z" class="cash-desk" />
+                  <path d="M120 225H270" />
+                </g>
+
+                <g class="wall-labels">
+                  <text x="55" y="49">PARED 10</text><text x="7" y="118" transform="rotate(-90 7 118)">PARED 9</text>
+                  <text x="47" y="169">PARED 8</text><text x="47" y="199">PARED 7</text>
+                  <text x="7" y="265" transform="rotate(-90 7 265)">PARED 6</text><text x="48" y="314">PARED 5</text>
+                  <text x="48" y="344">PARED 4</text><text x="7" y="374" transform="rotate(-90 7 374)">PARED 3</text>
+                  <text x="7" y="447" transform="rotate(-90 7 447)">PARED 2</text><text x="60" y="500">PARED 1 / ESCAPARATE</text>
+
+                  <text x="195" y="49">PARED 11</text><text x="167" y="219">PARED 12</text>
+                  <text x="303" y="49">PARED 13</text><text x="349" y="116" transform="rotate(90 349 116)">PARED 14</text>
+                  <text x="288" y="169">PARED 15</text><text x="288" y="199">PARED 16</text>
+                  <text x="349" y="226" transform="rotate(90 349 226)">PARED 17</text><text x="349" y="289" transform="rotate(90 349 289)">PARED 18</text>
+                  <text x="288" y="314">PARED 19</text><text x="288" y="344">PARED 20</text>
+                  <text x="349" y="385" transform="rotate(90 349 385)">PARED 21</text><text x="274" y="454">PARED 22</text>
+                </g>
+
+                <g class="wall-fixtures">
+                  <rect x="101" y="164" width="10" height="22" /><rect x="16" y="225" width="14" height="43" />
+                  <rect x="101" y="309" width="11" height="24" /><rect x="16" y="352" width="14" height="42" />
+                  <rect x="16" y="421" width="14" height="43" /><rect x="299" y="91" width="11" height="42" />
+                  <rect x="270" y="164" width="10" height="22" /><rect x="330" y="216" width="12" height="42" />
+                  <rect x="270" y="309" width="10" height="23" /><rect x="330" y="360" width="12" height="42" />
+                  <rect x="210" y="164" width="12" height="35" /><rect x="285" y="164" width="12" height="35" />
+                </g>
+
+                <g class="furniture">
+                  <rect x="48" y="94" width="50" height="31" /><text x="73" y="113">MESA 1</text>
+                  <rect x="172" y="92" width="62" height="33" /><text x="203" y="112">MESA 2</text>
+                  <rect x="280" y="96" width="42" height="29" /><text x="301" y="114">MESA 1</text>
+                  <rect x="47" y="223" width="48" height="48" /><text x="71" y="249">MESA 1</text>
+                  <rect x="286" y="233" width="37" height="37" /><text x="304" y="254">MESA 1</text>
+                  <rect x="50" y="354" width="45" height="45" /><text x="72" y="379">MESA 2</text>
+                  <rect x="50" y="420" width="45" height="45" /><text x="72" y="445">MESA 3</text>
+                  <rect x="266" y="355" width="34" height="43" /><text x="283" y="379">MESA 1</text>
+                  <rect x="304" y="355" width="34" height="43" /><text x="321" y="379">MESA 2</text>
+                  <rect x="153" y="333" width="76" height="9" /><rect x="153" y="352" width="76" height="9" />
+                  <circle cx="192" cy="418" r="34" class="main-table" />
+                  <text x="192" y="409" class="main-table-label"><tspan x="192">M.</tspan><tspan x="192" dy="10">PRINCIPAL</tspan></text>
+                </g>
+
+                <g class="zone-labels">
+                  <text x="112" y="137">ZONA 3</text><text x="112" y="148" class="zone-name">BAÑO</text>
+                  <text x="292" y="142">ZONA 4</text><text x="292" y="153" class="zone-name">KIDS</text>
+                  <text x="111" y="255">ZONA 2</text><text x="111" y="266" class="zone-name">SALÓN</text>
+                  <text x="283" y="280">ZONA 5</text><text x="283" y="291" class="zone-name">DORMITORIO</text>
+                  <text x="95" y="403">ZONA 1</text><text x="95" y="414" class="zone-name">COCINA</text>
+                  <text x="247" y="410">ZONA 6</text><text x="247" y="421" class="zone-name">DORMITORIO</text>
+                  <text x="195" y="306">ZONA 7 · EXPO CAJA</text>
+                </g>
+
+                <g class="feature-labels">
+                  <text x="202" y="146">COSMÉTICA</text><text x="70" y="282">TIRADORES</text>
+                  <text x="252" y="211">ALFOMBRA</text><text x="195" y="261" class="cash-label">CAJA</text>
+                  <text x="247" y="323">ESPEJO</text><text x="277" y="499">ENTRADA</text>
+                </g>
+              </svg>
+              <figcaption>Plano trazado a partir del croquis original · paredes 1–22</figcaption>
+            </figure>
+            <p class="reference-note">Zonas según el croquis: 1 Cocina, 2 Salón, 3 Baño, 4 Kids, 5 y 6 Dormitorio, 7 Expo caja.</p>
             <details class="recall-card"><summary><span>REPASO</span> Di las zonas 1 a 7 en orden.</summary><p>Cocina, Salón, Baño, Kids, Dormitorio, Dormitorio y Expo caja.</p></details>
           </section>
 
@@ -499,7 +606,7 @@
         <div id="successSoundPlayer"></div>
       </div>
     </div>
-    <script src="app.js?v=13"></script>
+    <script src="app.js?v=14"></script>
     <script src="https://www.youtube.com/iframe_api" async></script>
   </body>
 </html>
