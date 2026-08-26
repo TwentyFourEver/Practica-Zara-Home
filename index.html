@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#f6f3ed" />
     <meta name="description" content="Práctica móvil de tallas y medidas para ropa de cama y cojines." />
     <title>Casa — Tallas y medidas</title>
-    <link rel="stylesheet" href="styles.css?v=12" />
+    <link rel="stylesheet" href="styles.css?v=14" />
   </head>
   <body>
     <div class="app-shell">
@@ -106,6 +106,15 @@
             <p class="eyebrow">GUÍA PARA NO CONFUNDIRLAS</p>
             <h1 id="learnTitle">Aprende por<br />patrones.</h1>
             <p>No memorices cada dato por separado. Ubica primero la familia, recuerda su número ancla y después aprende solamente sus excepciones.</p>
+          </div>
+
+          <div class="learning-area-switch reveal delay-1" role="group" aria-label="Tema para aprender">
+            <button class="learning-area-button active" type="button" data-learn-destination="learnView" aria-pressed="true">
+              <span>01</span><strong>Medidas y tallas</strong><small>Ropa de cama y cojines</small>
+            </button>
+            <button class="learning-area-button" type="button" data-learn-destination="storeView" aria-pressed="false">
+              <span>02</span><strong>Tienda</strong><small>Manual, códigos y croquis</small>
+            </button>
           </div>
 
           <ol class="learning-method reveal delay-1" aria-label="Método de estudio en tres pasos">
@@ -302,6 +311,15 @@
             <p class="eyebrow">MANUAL DE TIENDA</p>
             <h1 id="storeTitle">Aprende lo esencial<br />de Zara Home.</h1>
             <p>Estudia un bloque a la vez. Intenta responder la pregunta de memoria antes de abrir cada tarjeta.</p>
+          </div>
+
+          <div class="learning-area-switch reveal delay-1" role="group" aria-label="Tema para aprender">
+            <button class="learning-area-button" type="button" data-learn-destination="learnView" aria-pressed="false">
+              <span>01</span><strong>Medidas y tallas</strong><small>Ropa de cama y cojines</small>
+            </button>
+            <button class="learning-area-button active" type="button" data-learn-destination="storeView" aria-pressed="true">
+              <span>02</span><strong>Tienda</strong><small>Manual, códigos y croquis</small>
+            </button>
           </div>
 
           <nav class="topic-jump reveal delay-1" aria-label="Temas del manual">
@@ -554,6 +572,15 @@
             <h1 id="quizTitle">Pon a prueba<br />lo aprendido.</h1>
           </div>
 
+          <div class="quiz-mode-switch reveal delay-1" role="group" aria-label="Tipo de quiz">
+            <button class="quiz-mode-button active" type="button" data-quiz-mode="measurements" aria-pressed="true">
+              <span>01</span><strong>Medidas y tallas</strong><small>Ropa de cama y cojines</small>
+            </button>
+            <button class="quiz-mode-button" type="button" data-quiz-mode="store" aria-pressed="false">
+              <span>02</span><strong>Tienda</strong><small>Manual, códigos y croquis</small>
+            </button>
+          </div>
+
           <div class="stats-grid reveal delay-1" aria-label="Estadísticas de la sesión">
             <div class="stat-card correct-stat"><span class="stat-icon">✓</span><strong id="correctStat">0</strong><small>CORRECTAS</small></div>
             <div class="stat-card wrong-stat"><span class="stat-icon">×</span><strong id="wrongStat">0</strong><small>INCORRECTAS</small></div>
@@ -591,10 +618,6 @@
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v16H6.5A2.5 2.5 0 0 0 4 21.5v-16ZM20 5.5A2.5 2.5 0 0 0 17.5 3H13v16h4.5a2.5 2.5 0 0 1 2.5 2.5v-16Z" /></svg>
           <span>Aprender</span>
         </button>
-        <button class="nav-item" type="button" data-view="storeView">
-          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 10h16M5 10v10h14V10M3 10l2-6h14l2 6M9 20v-6h6v6" /></svg>
-          <span>Tienda</span>
-        </button>
         <button class="nav-item" type="button" data-view="quizView">
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 11a3 3 0 1 1 3.7 2.9c-.5.2-.7.6-.7 1.1v.3M12 19h.01M4 12a8 8 0 1 0 16 0 8 8 0 0 0-16 0Z" /></svg>
           <span>Quiz</span>
@@ -606,7 +629,7 @@
         <div id="successSoundPlayer"></div>
       </div>
     </div>
-    <script src="app.js?v=14"></script>
+    <script src="app.js?v=17"></script>
     <script src="https://www.youtube.com/iframe_api" async></script>
   </body>
 </html>

@@ -873,6 +873,66 @@ h1 {
   padding-bottom: 24px;
 }
 
+.quiz-mode-switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.quiz-mode-button {
+  position: relative;
+  min-height: 82px;
+  padding: 12px 12px 11px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--white);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms, background 160ms, box-shadow 160ms;
+}
+
+.quiz-mode-button > span,
+.quiz-mode-button strong,
+.quiz-mode-button small {
+  display: block;
+}
+
+.quiz-mode-button > span {
+  margin-bottom: 8px;
+  color: var(--taupe);
+  font-family: var(--serif);
+  font-size: 12px;
+}
+
+.quiz-mode-button strong {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.quiz-mode-button small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 8px;
+  line-height: 1.3;
+}
+
+.quiz-mode-button.active {
+  border-color: var(--ink);
+  background: #eee7dc;
+  box-shadow: inset 0 -2px 0 var(--ink);
+}
+
+.quiz-mode-button.active::after {
+  position: absolute;
+  top: 11px;
+  right: 11px;
+  content: "✓";
+  font-size: 11px;
+}
+
 .learn-header {
   padding: 42px 3px 22px;
 }
@@ -883,6 +943,66 @@ h1 {
   color: var(--muted);
   font-size: 14px;
   line-height: 1.6;
+}
+
+.learning-area-switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.learning-area-button {
+  position: relative;
+  min-height: 82px;
+  padding: 12px 12px 11px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--white);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms, background 160ms, box-shadow 160ms;
+}
+
+.learning-area-button > span,
+.learning-area-button strong,
+.learning-area-button small {
+  display: block;
+}
+
+.learning-area-button > span {
+  margin-bottom: 8px;
+  color: var(--taupe);
+  font-family: var(--serif);
+  font-size: 12px;
+}
+
+.learning-area-button strong {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.learning-area-button small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 8px;
+  line-height: 1.3;
+}
+
+.learning-area-button.active {
+  border-color: var(--ink);
+  background: #eee7dc;
+  box-shadow: inset 0 -2px 0 var(--ink);
+}
+
+.learning-area-button.active::after {
+  position: absolute;
+  top: 11px;
+  right: 11px;
+  content: "✓";
+  font-size: 11px;
 }
 
 .learning-method {
@@ -2202,7 +2322,7 @@ h1 {
   bottom: 0;
   left: 0;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   min-height: calc(69px + env(safe-area-inset-bottom));
   padding: 7px max(18px, calc((100vw - 520px) / 2)) env(safe-area-inset-bottom);
   border-top: 1px solid var(--line);

@@ -165,7 +165,9 @@ const $$ = (selector) => [...document.querySelectorAll(selector)];
 
 let currentQuestion = null;
 let quizLocked = false;
+let quizMode = "measurements";
 let quizState = loadQuizState();
+let quizHistory = loadQuizHistory();
 let toastTimer;
 let audioContext;
 let errorAudio;
@@ -268,21 +270,77 @@ function playQuizSound(isCorrect) {
 }
 
 function loadQuizState() {
+  const emptyStats = () => ({ correct: 0, wrong: 0, streak: 0, answered: 0 });
   try {
     const stored = JSON.parse(localStorage.getItem("casaQuizState"));
+    if (stored?.measurements || stored?.store) {
+      return {
+        measurements: { ...emptyStats(), ...stored.measurements },
+        store: { ...emptyStats(), ...stored.store }
+      };
+    }
     return {
-      correct: Number(stored?.correct) || 0,
-      wrong: Number(stored?.wrong) || 0,
-      streak: Number(stored?.streak) || 0,
-      answered: Number(stored?.answered) || 0
+      measurements: {
+        correct: Number(stored?.correct) || 0,
+        wrong: Number(stored?.wrong) || 0,
+        streak: Number(stored?.streak) || 0,
+        answered: Number(stored?.answered) || 0
+      },
+      store: emptyStats()
     };
   } catch {
-    return { correct: 0, wrong: 0, streak: 0, answered: 0 };
+    return { measurements: emptyStats(), store: emptyStats() };
   }
 }
 
 function saveQuizState() {
   localStorage.setItem("casaQuizState", JSON.stringify(quizState));
+}
+
+function activeQuizStats() {
+  return quizState[quizMode];
+}
+
+function loadQuizHistory() {
+  const emptyHistory = () => ({ used: [], last: null });
+  try {
+    const stored = JSON.parse(localStorage.getItem("casaQuizHistory"));
+    return {
+      measurements: {
+        used: Array.isArray(stored?.measurements?.used) ? stored.measurements.used : [],
+        last: stored?.measurements?.last || null
+      },
+      store: {
+        used: Array.isArray(stored?.store?.used) ? stored.store.used : [],
+        last: stored?.store?.last || null
+      }
+    };
+  } catch {
+    return { measurements: emptyHistory(), store: emptyHistory() };
+  }
+}
+
+function saveQuizHistory() {
+  localStorage.setItem("casaQuizHistory", JSON.stringify(quizHistory));
+}
+
+function takeUnseenQuestion(mode, bank) {
+  const history = quizHistory[mode];
+  const validIds = new Set(bank.map((item) => item.id));
+  history.used = history.used.filter((id) => validIds.has(id));
+
+  let available = bank.filter((item) => !history.used.includes(item.id));
+  if (!available.length) {
+    history.used = [];
+    available = bank.filter((item) => item.id !== history.last);
+    if (!available.length) available = bank;
+  }
+
+  const selected = sample(available);
+  history.used.push(selected.id);
+  history.last = selected.id;
+  saveQuizHistory();
+  return selected.create();
 }
 
 function normalizeMeasure(value) {
@@ -501,6 +559,30 @@ function setupModeSwitch() {
   });
 }
 
+function updateLearningAreaButtons(target) {
+  $$(".learning-area-button").forEach((button) => {
+    const isActive = button.dataset.learnDestination === target;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+}
+
+function setupLearningAreaSwitch() {
+  $$(".learning-area-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      const target = button.dataset.learnDestination;
+      $$(".view").forEach((view) => view.classList.toggle("active", view.id === target));
+      updateLearningAreaButtons(target);
+      $$(".nav-item").forEach((item) => {
+        const isLearn = item.dataset.view === "learnView";
+        item.classList.toggle("active", isLearn);
+        item.toggleAttribute("aria-current", isLearn);
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
+}
+
 function setupNavigation() {
   $$(".nav-item").forEach((button) => {
     button.addEventListener("click", () => {
@@ -510,16 +592,30 @@ function setupNavigation() {
         item.toggleAttribute("aria-current", item === button);
       });
       $$(".view").forEach((view) => view.classList.toggle("active", view.id === target));
+      if (target === "learnView") updateLearningAreaButtons("learnView");
       window.scrollTo({ top: 0, behavior: "smooth" });
       if (target === "quizView" && !currentQuestion) createQuestion();
     });
   });
 }
 
-function makeBeddingQuestion() {
-  const size = sample(Object.keys(beddingData));
-  const product = sample(products);
-  const askMeasure = Math.random() < 0.62;
+function setupQuizModeSwitch() {
+  $$(".quiz-mode-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      quizMode = button.dataset.quizMode;
+      $$(".quiz-mode-button").forEach((item) => {
+        const isActive = item === button;
+        item.classList.toggle("active", isActive);
+        item.setAttribute("aria-pressed", String(isActive));
+      });
+      currentQuestion = null;
+      updateStats();
+      createQuestion();
+    });
+  });
+}
+
+function makeBeddingQuestion(size, product, askMeasure) {
   const answer = beddingData[size][product.id][askMeasure ? 0 : 1];
   return {
     category: "ROPA DE CAMA",
@@ -530,9 +626,7 @@ function makeBeddingQuestion() {
   };
 }
 
-function makeCushionQuestion() {
-  const item = sample(cushionData);
-  const askMeasure = Math.random() < 0.68;
+function makeCushionQuestion(item, askMeasure) {
   const answer = askMeasure ? item.measure : item.size;
   return {
     category: "COJINES",
@@ -545,8 +639,7 @@ function makeCushionQuestion() {
   };
 }
 
-function makeStoreQuestion() {
-  const item = sample(storeQuestions);
+function makeStoreQuestion(item) {
   return {
     category: "MANUAL DE TIENDA",
     question: item.question,
@@ -557,15 +650,31 @@ function makeStoreQuestion() {
   };
 }
 
+function measurementQuestionBank() {
+  const beddingQuestions = Object.keys(beddingData).flatMap((size) => products.flatMap((product) => [true, false].map((askMeasure) => ({
+    id: `bedding:${size}:${product.id}:${askMeasure ? "measure" : "code"}`,
+    create: () => makeBeddingQuestion(size, product, askMeasure)
+  }))));
+  const cushionQuestions = cushionData.flatMap((item) => [true, false].map((askMeasure) => ({
+    id: `cushion:${item.size}:${askMeasure ? "measure" : "code"}`,
+    create: () => makeCushionQuestion(item, askMeasure)
+  })));
+  return [...beddingQuestions, ...cushionQuestions];
+}
+
+function storeQuestionBank() {
+  return storeQuestions.map((item, index) => ({
+    id: `store:${index}`,
+    create: () => makeStoreQuestion(item)
+  }));
+}
+
 function createQuestion() {
   quizLocked = false;
-  const questionType = Math.random();
-  currentQuestion = questionType < 0.55
-    ? makeBeddingQuestion()
-    : questionType < 0.7
-      ? makeCushionQuestion()
-      : makeStoreQuestion();
-  const visibleNumber = quizState.answered + 1;
+  currentQuestion = quizMode === "store"
+    ? takeUnseenQuestion("store", storeQuestionBank())
+    : takeUnseenQuestion("measurements", measurementQuestionBank());
+  const visibleNumber = activeQuizStats().answered + 1;
   $("#questionCategory").textContent = currentQuestion.category;
   $("#questionNumber").textContent = String(((visibleNumber - 1) % 99) + 1).padStart(2, "0");
   $("#questionText").innerHTML = currentQuestion.question;
@@ -639,13 +748,14 @@ function submitQuizAnswer(event) {
   });
   $(".quiz-check-button").classList.add("hidden");
 
-  quizState.answered += 1;
+  const stats = activeQuizStats();
+  stats.answered += 1;
   if (isCorrect) {
-    quizState.correct += 1;
-    quizState.streak += 1;
+    stats.correct += 1;
+    stats.streak += 1;
   } else {
-    quizState.wrong += 1;
-    quizState.streak = 0;
+    stats.wrong += 1;
+    stats.streak = 0;
   }
   saveQuizState();
   updateStats(true);
@@ -665,9 +775,10 @@ function submitQuizAnswer(event) {
 }
 
 function updateStats(animate = false) {
-  $("#correctStat").textContent = quizState.correct;
-  $("#wrongStat").textContent = quizState.wrong;
-  $("#streakStat").textContent = quizState.streak;
+  const stats = activeQuizStats();
+  $("#correctStat").textContent = stats.correct;
+  $("#wrongStat").textContent = stats.wrong;
+  $("#streakStat").textContent = stats.streak;
   if (animate) {
     const grid = $(".stats-grid");
     grid.classList.remove("bump");
@@ -680,7 +791,8 @@ function resetProgress() {
   const tableInputs = $$(".table-input");
   const tableControls = $$(".answer-control");
   const hasTableAnswers = tableInputs.some((input) => input.value.trim());
-  const hasProgress = quizState.correct || quizState.wrong || quizState.streak || hasTableAnswers;
+  const hasQuizProgress = Object.values(quizState).some((stats) => stats.correct || stats.wrong || stats.streak || stats.answered);
+  const hasProgress = hasQuizProgress || hasTableAnswers;
   if (!hasProgress) {
     showToast("Todo está limpio. Ya puedes comenzar.");
     return;
@@ -695,8 +807,16 @@ function resetProgress() {
   tableControls.forEach((control) => control.classList.remove("correct", "wrong"));
   updateFillProgress("bedding");
   updateFillProgress("cushions");
-  quizState = { correct: 0, wrong: 0, streak: 0, answered: 0 };
+  quizState = {
+    measurements: { correct: 0, wrong: 0, streak: 0, answered: 0 },
+    store: { correct: 0, wrong: 0, streak: 0, answered: 0 }
+  };
+  quizHistory = {
+    measurements: { used: [], last: null },
+    store: { used: [], last: null }
+  };
   saveQuizState();
+  saveQuizHistory();
   updateStats();
   if (currentQuestion) createQuestion();
   showToast("Práctica reiniciada. Empecemos de nuevo.");
@@ -704,7 +824,9 @@ function resetProgress() {
 
 setupFillTables();
 setupModeSwitch();
+setupLearningAreaSwitch();
 setupNavigation();
+setupQuizModeSwitch();
 $("#quizAnswerForm").addEventListener("submit", submitQuizAnswer);
 $("#nextQuestionButton").addEventListener("click", createQuestion);
 $("#resetButton").addEventListener("click", resetProgress);
